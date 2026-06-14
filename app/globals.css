@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { box-sizing: border-box; }
+
+html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+body {
+  background: #FAFAFA;
+  color: #171717;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 h-10 px-4 rounded-full bg-primary text-white text-sm font-medium
+           hover:bg-black active:scale-[0.99] transition-all disabled:opacity-50 disabled:pointer-events-none;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 h-10 px-4 rounded-full bg-surface text-primary text-sm font-medium border border-border
+           hover:bg-subtle active:scale-[0.99] transition-all disabled:opacity-50 disabled:pointer-events-none;
+  }
+  .field {
+    @apply w-full h-10 px-3.5 rounded-full bg-surface border border-border text-sm text-primary placeholder-secondary
+           focus:outline-none focus:ring-2 focus:ring-primary/15 focus:border-primary transition-all;
+  }
+  .field-area {
+    @apply w-full px-3.5 py-2.5 rounded-lg bg-surface border border-border text-sm text-primary placeholder-secondary
+           focus:outline-none focus:ring-2 focus:ring-primary/15 focus:border-primary transition-all resize-none;
+  }
+  .card {
+    @apply bg-surface border border-border rounded-md p-4;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium;
+  }
+}
