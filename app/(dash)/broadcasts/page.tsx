@@ -85,7 +85,7 @@ export default async function BroadcastsPage() {
         </div>
         <div>
           <label className="block text-sm font-medium mb-1.5">Title</label>
-          <input name="title" required placeholder="e.g. Service moved to 9am this Sunday" className="field" />
+          <input name="title" required placeholder="e.g. Heads up about this weekend's trips" className="field" />
         </div>
         <div>
           <label className="block text-sm font-medium mb-1.5">Message</label>

@@ -40,13 +40,13 @@ export default function NewCommunityPage() {
       <form action={createCommunity} className="flex flex-col gap-5">
         <div>
           <label className="block text-sm font-medium mb-1.5">Community code</label>
-          <input name="code" placeholder="e.g. THNC-SABO" required className="field uppercase font-mono" />
+          <input name="code" placeholder="e.g. RIVERSIDE-01" required className="field uppercase font-mono" />
           <p className="text-xs text-secondary mt-1.5">Short, memorable, unique. Shared with members.</p>
         </div>
 
         <div>
           <label className="block text-sm font-medium mb-1.5">Name</label>
-          <input name="name" placeholder="The Hope Nation Church" required className="field" />
+          <input name="name" placeholder="e.g. Riverside Community" required className="field" />
         </div>
 
         <CommunityLocationFields />
