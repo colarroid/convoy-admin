@@ -58,7 +58,7 @@ export default async function ReportsPage({ searchParams }: { searchParams: { st
       id, category, details, status, admin_notes, created_at,
       reporter:profiles!reports_reporter_id_fkey ( first_name, last_name ),
       reported:profiles!reports_reported_user_id_fkey ( id, first_name, last_name, suspended ),
-      trip:trips ( pickup_point, depart_date )
+      trip:trips ( pickup_point, depart_date, community:communities ( name, code ) )
     `)
     .order('created_at', { ascending: false })
     .limit(100)
@@ -103,10 +103,16 @@ export default async function ReportsPage({ searchParams }: { searchParams: { st
                   {r.reported ? name(r.reported) : '—'}
                   {r.reported?.suspended && <span className="chip bg-red-50 text-red-600">Suspended</span>}
                 </dd>
+                {r.trip?.community && (
+                  <>
+                    <dt className="text-secondary">Community</dt>
+                    <dd>{r.trip.community.name} <span className="text-secondary font-mono text-xs">({r.trip.community.code})</span></dd>
+                  </>
+                )}
                 {r.trip && (
                   <>
                     <dt className="text-secondary">Trip</dt>
-                    <dd className="text-secondary">{r.trip.pickup_point} · {new Date(r.trip.depart_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</dd>
+                    <dd className="text-secondary">Pickup: {r.trip.pickup_point} · {new Date(r.trip.depart_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</dd>
                   </>
                 )}
                 {r.details && (
