@@ -4,11 +4,13 @@ import { supabaseAdmin } from '@/lib/supabase/admin'
 
 export const dynamic = 'force-dynamic'
 
-const STATUS_STYLE: Record<string, string> = {
-  open: 'bg-blue-50 text-blue-600',
-  full: 'bg-amber-50 text-amber-600',
-  completed: 'bg-green-50 text-green-600',
-  cancelled: 'bg-neutral text-secondary',
+function tripBadge(t: { status: string; departs_at: string | null; seats_open: number }) {
+  if (t.status === 'cancelled') return { label: 'Cancelled', cls: 'bg-neutral text-secondary' }
+  if (t.status === 'completed') return { label: 'Completed', cls: 'bg-green-50 text-green-600' }
+  const past = !!t.departs_at && new Date(t.departs_at).getTime() < Date.now()
+  if (past) return { label: 'Awaiting confirmation', cls: 'bg-amber-50 text-amber-600' }
+  if (t.seats_open === 0) return { label: 'Full', cls: 'bg-amber-50 text-amber-700' }
+  return { label: 'Open', cls: 'bg-blue-50 text-blue-600' }
 }
 const REQ_STYLE: Record<string, string> = {
   pending: 'bg-amber-50 text-amber-600',
@@ -23,7 +25,7 @@ export default async function TripDetailPage({ params }: { params: { id: string 
   const { data: trip } = await db
     .from('trips')
     .select(`
-      id, depart_date, depart_time, pickup_point, pickup_note, vehicle, color, status,
+      id, depart_date, depart_time, departs_at, pickup_point, pickup_note, vehicle, color, status,
       seats_total, seats_open, created_at,
       host:profiles!trips_host_id_fkey ( id, first_name, last_name, phone ),
       community:communities ( id, name, code )
@@ -58,7 +60,7 @@ export default async function TripDetailPage({ params }: { params: { id: string 
             <Link href={`/communities/${community.id}`} className="text-sm text-secondary hover:underline mt-0.5 inline-block">{community.name}</Link>
           )}
         </div>
-        <span className={`chip capitalize ${STATUS_STYLE[trip.status] ?? 'bg-neutral text-secondary'}`}>{trip.status}</span>
+        <span className={`chip ${tripBadge(trip).cls}`}>{tripBadge(trip).label}</span>
       </div>
 
       <dl className="card text-sm grid grid-cols-[7rem_1fr] gap-y-2 mb-8">

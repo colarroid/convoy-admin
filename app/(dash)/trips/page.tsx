@@ -20,14 +20,18 @@ async function cancelTrip(formData: FormData) {
   revalidatePath('/')
 }
 
-const STATUS_STYLE: Record<string, string> = {
-  open: 'bg-blue-50 text-blue-600',
-  full: 'bg-amber-50 text-amber-600',
-  completed: 'bg-green-50 text-green-600',
-  cancelled: 'bg-neutral text-secondary',
+// Derived display state: the DB `status` is open until the host confirms, so a
+// past open trip is really "awaiting confirmation", and a 0-seat open trip is "full".
+function tripBadge(t: { status: string; departs_at: string | null; seats_open: number }) {
+  if (t.status === 'cancelled') return { label: 'Cancelled', cls: 'bg-neutral text-secondary' }
+  if (t.status === 'completed') return { label: 'Completed', cls: 'bg-green-50 text-green-600' }
+  const past = !!t.departs_at && new Date(t.departs_at).getTime() < Date.now()
+  if (past) return { label: 'Awaiting confirmation', cls: 'bg-amber-50 text-amber-600' }
+  if (t.seats_open === 0) return { label: 'Full', cls: 'bg-amber-50 text-amber-700' }
+  return { label: 'Open', cls: 'bg-blue-50 text-blue-600' }
 }
 
-const STATUSES = ['open', 'full', 'completed', 'cancelled'] as const
+const STATUSES = ['open', 'completed', 'cancelled'] as const
 
 export default async function TripsPage({ searchParams }: { searchParams: { status?: string; community?: string } }) {
   const db = supabaseAdmin()
@@ -39,7 +43,7 @@ export default async function TripsPage({ searchParams }: { searchParams: { stat
   let query = db
     .from('trips')
     .select(`
-      id, depart_date, depart_time, pickup_point, status, seats_total, seats_open, created_at,
+      id, depart_date, depart_time, departs_at, pickup_point, status, seats_total, seats_open, created_at,
       host:profiles!trips_host_id_fkey ( first_name, last_name ),
       community:communities ( name, code )
     `)
@@ -97,7 +101,8 @@ export default async function TripsPage({ searchParams }: { searchParams: { stat
           <tbody>
             {trips && trips.length > 0 ? trips.map((t: any) => {
               const host = [t.host?.first_name, t.host?.last_name].filter(Boolean).join(' ').trim() || '—'
-              const active = t.status === 'open' || t.status === 'full'
+              const badge = tripBadge(t)
+              const active = t.status === 'open'
               return (
                 <tr key={t.id} className="border-b border-border last:border-0 hover:bg-subtle/60 align-top">
                   <td className="px-4 py-3 whitespace-nowrap">
@@ -111,7 +116,7 @@ export default async function TripsPage({ searchParams }: { searchParams: { stat
                   <td className="px-4 py-3 text-secondary max-w-[16rem] truncate">{t.pickup_point}</td>
                   <td className="px-4 py-3 text-secondary">{t.seats_open}/{t.seats_total}</td>
                   <td className="px-4 py-3">
-                    <span className={`chip capitalize ${STATUS_STYLE[t.status] ?? 'bg-neutral text-secondary'}`}>{t.status}</span>
+                    <span className={`chip ${badge.cls}`}>{badge.label}</span>
                   </td>
                   <td className="px-4 py-3 text-right">
                     {active ? (
