@@ -40,7 +40,7 @@ export default function LoginPage() {
     <main className="min-h-screen flex items-center justify-center px-6">
       <div className="w-full max-w-sm">
         <div className="mb-8">
-          <p className="text-xl font-semibold tracking-tight">Convoy</p>
+          <p className="text-xl font-semibold tracking-tight">Veesaa</p>
           <p className="text-sm text-secondary mt-1">Admin sign in</p>
         </div>
 

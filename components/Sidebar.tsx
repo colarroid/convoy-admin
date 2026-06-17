@@ -28,7 +28,7 @@ export default function Sidebar({ email }: { email: string }) {
   return (
     <aside className="w-60 shrink-0 border-r border-border bg-surface flex flex-col h-screen sticky top-0">
       <div className="px-5 h-16 flex items-center border-b border-border">
-        <span className="text-base font-semibold tracking-tight">Convoy</span>
+        <span className="text-base font-semibold tracking-tight">Veesaa</span>
         <span className="ml-2 text-xs text-secondary">Admin</span>
       </div>
 
