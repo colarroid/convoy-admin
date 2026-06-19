@@ -79,7 +79,7 @@ export default async function BroadcastsPage() {
           <select name="community" defaultValue="" className="field">
             <option value="">All active members</option>
             {(communities ?? []).map(c => (
-              <option key={c.id} value={c.id}>{c.name} — people who offered or requested rides here</option>
+              <option key={c.id} value={c.id}>{c.name}, people who offered or requested rides here</option>
             ))}
           </select>
         </div>

@@ -58,7 +58,7 @@ export default function CommunityLocationFields({
         places.current = new g.maps.places.PlacesService(document.createElement('div'))
         token.current = new g.maps.places.AutocompleteSessionToken()
       })
-      .catch(() => setWarn('Address suggestions are unavailable — you can still type the address manually.'))
+      .catch(() => setWarn('Address suggestions are unavailable, you can still type the address manually.'))
   }, [])
 
   useEffect(() => {
@@ -161,7 +161,7 @@ export default function CommunityLocationFields({
           placeholder="Yaba, Lagos."
           className="field"
         />
-        <p className="text-xs text-secondary mt-1.5">Filled from the address — edit if needed.</p>
+        <p className="text-xs text-secondary mt-1.5">Filled from the address, edit if needed.</p>
       </div>
     </div>
   )

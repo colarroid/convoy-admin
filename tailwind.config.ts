@@ -1,6 +1,6 @@
 import type { Config } from 'tailwindcss'
 
-// Vercel Minimal Cloud — design tokens
+// Vercel Minimal Cloud, design tokens
 const config: Config = {
   content: ['./app/**/*.{ts,tsx}', './components/**/*.{ts,tsx}'],
   theme: {

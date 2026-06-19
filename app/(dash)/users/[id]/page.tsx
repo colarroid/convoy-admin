@@ -13,7 +13,7 @@ const STATUS_STYLE: Record<string, string> = {
   completed: 'bg-green-50 text-green-600',
   cancelled: 'bg-neutral text-secondary',
 }
-const fullName = (p: any) => [p?.first_name, p?.last_name].filter(Boolean).join(' ').trim() || '—'
+const fullName = (p: any) => [p?.first_name, p?.last_name].filter(Boolean).join(' ').trim() || '-'
 
 async function toggleSuspend(formData: FormData) {
   'use server'

@@ -53,9 +53,9 @@ export default async function CommunityDetailPage({ params }: { params: { id: st
 
       <dl className="card text-sm grid grid-cols-[7rem_1fr] gap-y-2 mb-8">
         <dt className="text-secondary">Address</dt>
-        <dd>{community.address ?? '—'}</dd>
+        <dd>{community.address ?? '-'}</dd>
         <dt className="text-secondary">Area</dt>
-        <dd>{community.area ?? '—'}</dd>
+        <dd>{community.area ?? '-'}</dd>
         <dt className="text-secondary">Created</dt>
         <dd>{new Date(community.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</dd>
       </dl>
@@ -66,7 +66,7 @@ export default async function CommunityDetailPage({ params }: { params: { id: st
           <table className="w-full text-sm">
             <tbody>
               {trips.map((t: any) => {
-                const host = [t.host?.first_name, t.host?.last_name].filter(Boolean).join(' ').trim() || '—'
+                const host = [t.host?.first_name, t.host?.last_name].filter(Boolean).join(' ').trim() || '-'
                 return (
                   <tr key={t.id} className="border-b border-border last:border-0 hover:bg-subtle/60">
                     <td className="px-4 py-3 whitespace-nowrap">

@@ -12,7 +12,7 @@ export function createServerSupabase() {
         getAll() { return cookieStore.getAll() },
         setAll(toSet: { name: string; value: string; options?: Record<string, unknown> }[]) {
           try { toSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options)) }
-          catch { /* called from a Server Component — ignore; middleware refreshes */ }
+          catch { /* called from a Server Component, ignore; middleware refreshes */ }
         },
       },
     },

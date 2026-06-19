@@ -65,11 +65,11 @@ export default async function TripDetailPage({ params }: { params: { id: string 
 
       <dl className="card text-sm grid grid-cols-[7rem_1fr] gap-y-2 mb-8">
         <dt className="text-secondary">Host</dt>
-        <dd>{host ? <Link href={`/users/${host.id}`} className="hover:underline">{name(host)}</Link> : '—'}</dd>
+        <dd>{host ? <Link href={`/users/${host.id}`} className="hover:underline">{name(host)}</Link> : '-'}</dd>
         <dt className="text-secondary">Pickup</dt>
-        <dd>{trip.pickup_point}{trip.pickup_note ? ` — ${trip.pickup_note}` : ''}</dd>
+        <dd>{trip.pickup_point}{trip.pickup_note ? `, ${trip.pickup_note}` : ''}</dd>
         <dt className="text-secondary">Vehicle</dt>
-        <dd>{[trip.color, trip.vehicle].filter(Boolean).join(' ') || '—'}</dd>
+        <dd>{[trip.color, trip.vehicle].filter(Boolean).join(' ') || '-'}</dd>
         <dt className="text-secondary">Seats</dt>
         <dd>{trip.seats_open} of {trip.seats_total} open</dd>
         <dt className="text-secondary">Posted</dt>

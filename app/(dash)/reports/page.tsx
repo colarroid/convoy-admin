@@ -100,7 +100,7 @@ export default async function ReportsPage({ searchParams }: { searchParams: { st
                 <dd>{name(r.reporter)}</dd>
                 <dt className="text-secondary">Reported</dt>
                 <dd className="flex items-center gap-2">
-                  {r.reported ? name(r.reported) : '—'}
+                  {r.reported ? name(r.reported) : '-'}
                   {r.reported?.suspended && <span className="chip bg-red-50 text-red-600">Suspended</span>}
                 </dd>
                 {r.trip?.community && (

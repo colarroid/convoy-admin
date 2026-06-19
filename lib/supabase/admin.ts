@@ -4,7 +4,7 @@ import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 let client: SupabaseClient | null = null
 
 /**
- * Service-role client — bypasses RLS for privileged admin reads/writes.
+ * Service-role client, bypasses RLS for privileged admin reads/writes.
  * Created lazily (only at request time) so the app builds without the key set.
  * SERVER ONLY. Never import this into a client component.
  */

@@ -100,7 +100,7 @@ export default async function TripsPage({ searchParams }: { searchParams: { stat
           </thead>
           <tbody>
             {trips && trips.length > 0 ? trips.map((t: any) => {
-              const host = [t.host?.first_name, t.host?.last_name].filter(Boolean).join(' ').trim() || '—'
+              const host = [t.host?.first_name, t.host?.last_name].filter(Boolean).join(' ').trim() || '-'
               const badge = tripBadge(t)
               const active = t.status === 'open'
               return (
@@ -112,7 +112,7 @@ export default async function TripsPage({ searchParams }: { searchParams: { stat
                     </Link>
                   </td>
                   <td className="px-4 py-3 font-medium">{host}</td>
-                  <td className="px-4 py-3 text-secondary">{t.community?.name ?? '—'}</td>
+                  <td className="px-4 py-3 text-secondary">{t.community?.name ?? '-'}</td>
                   <td className="px-4 py-3 text-secondary max-w-[16rem] truncate">{t.pickup_point}</td>
                   <td className="px-4 py-3 text-secondary">{t.seats_open}/{t.seats_total}</td>
                   <td className="px-4 py-3">
@@ -126,7 +126,7 @@ export default async function TripsPage({ searchParams }: { searchParams: { stat
                           Cancel
                         </button>
                       </form>
-                    ) : <span className="text-xs text-secondary">—</span>}
+                    ) : <span className="text-xs text-secondary">-</span>}
                   </td>
                 </tr>
               )

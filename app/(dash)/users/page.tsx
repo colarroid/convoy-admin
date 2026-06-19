@@ -64,13 +64,13 @@ export default async function UsersPage({ searchParams }: { searchParams: { q?: 
           </thead>
           <tbody>
             {users && users.length > 0 ? users.map(u => {
-              const name = [u.first_name, u.last_name].filter(Boolean).join(' ').trim() || '—'
+              const name = [u.first_name, u.last_name].filter(Boolean).join(' ').trim() || '-'
               return (
                 <tr key={u.id} className="border-b border-border last:border-0 hover:bg-subtle/60">
                   <td className="px-4 py-3 font-medium">
                     <Link href={`/users/${u.id}`} className="hover:underline">{name}</Link>
                   </td>
-                  <td className="px-4 py-3 text-secondary">{u.phone ?? '—'}</td>
+                  <td className="px-4 py-3 text-secondary">{u.phone ?? '-'}</td>
                   <td className="px-4 py-3 text-secondary">{u.rides_completed}</td>
                   <td className="px-4 py-3">
                     {u.suspended

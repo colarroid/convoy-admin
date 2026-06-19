@@ -44,7 +44,7 @@ export default async function CommunitiesPage() {
                 <td className="px-4 py-3 font-medium">
                   <Link href={`/communities/${c.id}`} className="hover:underline">{c.name}</Link>
                 </td>
-                <td className="px-4 py-3 text-secondary">{c.area ?? '—'}</td>
+                <td className="px-4 py-3 text-secondary">{c.area ?? '-'}</td>
                 <td className="px-4 py-3 text-secondary">{new Date(c.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</td>
               </tr>
             )) : (
