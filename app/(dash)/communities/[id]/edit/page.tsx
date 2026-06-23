@@ -11,7 +11,7 @@ export const dynamic = 'force-dynamic'
 export default async function EditCommunityPage({ params }: { params: { id: string } }) {
   const { data: community } = await supabaseAdmin()
     .from('communities')
-    .select('id, code, name, address, area, logo_url')
+    .select('id, code, name, address, area, country, logo_url')
     .eq('id', params.id)
     .maybeSingle()
 
@@ -27,6 +27,7 @@ export default async function EditCommunityPage({ params }: { params: { id: stri
     const name = String(formData.get('name') ?? '').trim()
     const address = String(formData.get('address') ?? '').trim()
     const area = String(formData.get('area') ?? '').trim()
+    const country = String(formData.get('country') ?? '').trim().toUpperCase()
     const logo_url = String(formData.get('logo_url') ?? '').trim()
     if (!id || !code || !name) return
 
@@ -34,6 +35,7 @@ export default async function EditCommunityPage({ params }: { params: { id: stri
       code, name,
       address: address || null,
       area: area || null,
+      country: country || null,
       logo_url: logo_url || null,
     }).eq('id', id)
     if (error) throw new Error(`Could not update community: ${error.message}`)
@@ -62,6 +64,20 @@ export default async function EditCommunityPage({ params }: { params: { id: stri
         </div>
 
         <CommunityLocationFields defaultAddress={community.address ?? ''} defaultArea={community.area ?? ''} />
+
+        <div>
+          <label className="block text-sm font-medium mb-1.5">Country</label>
+          <select name="country" className="field" defaultValue={community.country ?? ''}>
+            <option value="">Not set</option>
+            <option value="NG">Nigeria</option>
+            <option value="CA">Canada</option>
+            <option value="US">United States</option>
+            <option value="GB">United Kingdom</option>
+            <option value="GH">Ghana</option>
+            <option value="KE">Kenya</option>
+            <option value="ZA">South Africa</option>
+          </select>
+        </div>
 
         <div>
           <label className="block text-sm font-medium mb-1.5">Logo</label>
