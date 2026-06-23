@@ -26,7 +26,9 @@ export default async function OverviewPage() {
   const [users, communities, openTrips, pendingReq, openReports] = await Promise.all([
     count('profiles'),
     count('communities'),
-    count('trips', (q) => q.in('status', ['open', 'full'])),
+    // Active = open/full and still upcoming. Past unconfirmed trips are
+    // "awaiting confirmation", not active.
+    count('trips', (q) => q.in('status', ['open', 'full']).gte('departs_at', new Date().toISOString())),
     count('join_requests', (q) => q.eq('status', 'pending')),
     count('reports', (q) => q.eq('status', 'open')),
   ])
