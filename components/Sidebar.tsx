@@ -12,7 +12,6 @@ const NAV = [
   { href: '/reports', label: 'Reports' },
   { href: '/feedback', label: 'Trip feedback' },
   { href: '/experiences', label: 'Experiences' },
-  { href: '/waitlist', label: 'Waitlist' },
   { href: '/call-requests', label: 'Call requests' },
   { href: '/broadcasts', label: 'Broadcasts' },
 ]
