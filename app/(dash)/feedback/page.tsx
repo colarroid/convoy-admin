@@ -19,7 +19,7 @@ export default async function FeedbackPage() {
     <div className="max-w-3xl">
       <div className="mb-8">
         <h1 className="text-2xl font-semibold tracking-tight" style={{ letterSpacing: '-0.96px' }}>Trip feedback</h1>
-        <p className="text-sm text-secondary mt-1">Why trips didn&apos;t happen, notes hosts left when cancelling a past ride.</p>
+        <p className="text-sm text-secondary mt-1">Reasons hosts gave when cancelling a ride, or when a trip didn&apos;t happen.</p>
       </div>
 
       {items && items.length > 0 ? (
