@@ -2,10 +2,12 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { getAdminUser } from '@/lib/auth'
+import Pagination from '@/components/Pagination'
 
 export const dynamic = 'force-dynamic'
 
 const MAX_PINNED = 7
+const PAGE_SIZE = 25
 
 const name = (p: any) => [p?.first_name, p?.last_name].filter(Boolean).join(' ').trim() || 'Unknown'
 
@@ -42,22 +44,29 @@ async function setVisible(formData: FormData) {
   revalidatePath('/experiences')
 }
 
-export default async function ExperiencesPage() {
-  const { data: items } = await supabaseAdmin()
+export default async function ExperiencesPage({ searchParams }: { searchParams: { page?: string } }) {
+  const page = Math.max(1, parseInt(searchParams.page ?? '1', 10) || 1)
+  const fromRow = (page - 1) * PAGE_SIZE
+
+  const { data: items, count } = await supabaseAdmin()
     .from('experiences')
-    .select('id, body, pinned, visible, created_at, author:profiles!experiences_user_id_fkey ( first_name, last_name )')
+    .select('id, body, pinned, visible, created_at, author:profiles!experiences_user_id_fkey ( first_name, last_name )', { count: 'exact' })
     .order('pinned', { ascending: false })
     .order('created_at', { ascending: false })
-    .limit(500)
+    .range(fromRow, fromRow + PAGE_SIZE - 1)
 
-  const pinnedCount = (items ?? []).filter((e: any) => e.pinned).length
+  // Count all pinned (not just this page) for the cap indicator.
+  const { count: pinnedCount } = await supabaseAdmin()
+    .from('experiences')
+    .select('id', { count: 'exact', head: true })
+    .eq('pinned', true)
 
   return (
     <div className="max-w-3xl">
       <div className="mb-6">
         <h1 className="text-2xl font-semibold tracking-tight" style={{ letterSpacing: '-0.96px' }}>Experiences</h1>
         <p className="text-sm text-secondary mt-1">
-          Member testimonials. Pin up to {MAX_PINNED} to feature on the landing page ({pinnedCount}/{MAX_PINNED} pinned). Hide anything off-brand.
+          Member testimonials. Pin up to {MAX_PINNED} to feature on the landing page ({pinnedCount ?? 0}/{MAX_PINNED} pinned). Hide anything off-brand.
         </p>
       </div>
 
@@ -99,6 +108,8 @@ export default async function ExperiencesPage() {
           <p className="text-sm text-secondary">No experiences shared yet.</p>
         </div>
       )}
+
+      <Pagination page={page} pageSize={PAGE_SIZE} total={count ?? 0} basePath="/experiences" />
     </div>
   )
 }

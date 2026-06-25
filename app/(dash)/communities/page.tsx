@@ -1,13 +1,18 @@
 import Link from 'next/link'
 import { supabaseAdmin } from '@/lib/supabase/admin'
+import Pagination from '@/components/Pagination'
 
 export const dynamic = 'force-dynamic'
+const PAGE_SIZE = 25
 
-export default async function CommunitiesPage() {
-  const { data: communities } = await supabaseAdmin()
+export default async function CommunitiesPage({ searchParams }: { searchParams: { page?: string } }) {
+  const page = Math.max(1, parseInt(searchParams.page ?? '1', 10) || 1)
+  const fromRow = (page - 1) * PAGE_SIZE
+  const { data: communities, count } = await supabaseAdmin()
     .from('communities')
-    .select('id, code, name, area, logo_url, created_at')
+    .select('id, code, name, area, logo_url, created_at', { count: 'exact' })
     .order('created_at', { ascending: false })
+    .range(fromRow, fromRow + PAGE_SIZE - 1)
 
   return (
     <div>
@@ -53,6 +58,8 @@ export default async function CommunitiesPage() {
           </tbody>
         </table>
       </div>
+
+      <Pagination page={page} pageSize={PAGE_SIZE} total={count ?? 0} basePath="/communities" />
     </div>
   )
 }

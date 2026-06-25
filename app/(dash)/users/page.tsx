@@ -3,8 +3,10 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { getAdminUser } from '@/lib/auth'
+import Pagination from '@/components/Pagination'
 
 export const dynamic = 'force-dynamic'
+const PAGE_SIZE = 25
 
 async function toggleSuspend(formData: FormData) {
   'use server'
@@ -20,13 +22,16 @@ async function toggleSuspend(formData: FormData) {
   revalidatePath('/users')
 }
 
-export default async function UsersPage({ searchParams }: { searchParams: { q?: string } }) {
+export default async function UsersPage({ searchParams }: { searchParams: { q?: string; page?: string } }) {
   const q = (searchParams.q ?? '').trim()
+  const page = Math.max(1, parseInt(searchParams.page ?? '1', 10) || 1)
+  const fromRow = (page - 1) * PAGE_SIZE
 
   let query = supabaseAdmin()
     .from('profiles')
-    .select('id, first_name, last_name, phone, rides_completed, suspended, created_at')
+    .select('id, first_name, last_name, phone, rides_completed, suspended, created_at', { count: 'exact' })
     .order('created_at', { ascending: false })
+    .range(fromRow, fromRow + PAGE_SIZE - 1)
 
   if (q) {
     // Inside .or() the ilike wildcard is *, not % (PostgREST syntax).
@@ -34,7 +39,7 @@ export default async function UsersPage({ searchParams }: { searchParams: { q?: 
     query = query.or(`first_name.ilike.${like},last_name.ilike.${like},phone.ilike.${like}`)
   }
 
-  const { data: users } = await query
+  const { data: users, count } = await query
 
   return (
     <div>
@@ -102,6 +107,8 @@ export default async function UsersPage({ searchParams }: { searchParams: { q?: 
           </tbody>
         </table>
       </div>
+
+      <Pagination page={page} pageSize={PAGE_SIZE} total={count ?? 0} basePath="/users" params={{ q }} />
     </div>
   )
 }

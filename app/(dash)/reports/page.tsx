@@ -4,8 +4,10 @@ import { redirect } from 'next/navigation'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { getAdminUser } from '@/lib/auth'
 import { categoryLabel } from '@/lib/reportCategories'
+import Pagination from '@/components/Pagination'
 
 export const dynamic = 'force-dynamic'
+const PAGE_SIZE = 25
 
 async function updateReport(formData: FormData) {
   'use server'
@@ -49,8 +51,10 @@ const name = (p: any) => [p?.first_name, p?.last_name].filter(Boolean).join(' ')
 
 const STATUSES = ['open', 'reviewing', 'resolved'] as const
 
-export default async function ReportsPage({ searchParams }: { searchParams: { status?: string } }) {
+export default async function ReportsPage({ searchParams }: { searchParams: { status?: string; page?: string } }) {
   const status = STATUSES.includes(searchParams.status as any) ? searchParams.status : ''
+  const page = Math.max(1, parseInt(searchParams.page ?? '1', 10) || 1)
+  const fromRow = (page - 1) * PAGE_SIZE
 
   let query = supabaseAdmin()
     .from('reports')
@@ -59,13 +63,13 @@ export default async function ReportsPage({ searchParams }: { searchParams: { st
       reporter:profiles!reports_reporter_id_fkey ( first_name, last_name ),
       reported:profiles!reports_reported_user_id_fkey ( id, first_name, last_name, suspended ),
       trip:trips ( pickup_point, depart_date, community:communities ( name, code ) )
-    `)
+    `, { count: 'exact' })
     .order('created_at', { ascending: false })
-    .limit(100)
+    .range(fromRow, fromRow + PAGE_SIZE - 1)
 
   if (status) query = query.eq('status', status)
 
-  const { data: reports } = await query
+  const { data: reports, count } = await query
 
   return (
     <div className="max-w-3xl">
@@ -161,6 +165,8 @@ export default async function ReportsPage({ searchParams }: { searchParams: { st
           <p className="text-sm text-secondary">{status ? `No ${status} reports.` : 'No reports filed. 🎉'}</p>
         </div>
       )}
+
+      <Pagination page={page} pageSize={PAGE_SIZE} total={count ?? 0} basePath="/reports" params={{ status }} />
     </div>
   )
 }

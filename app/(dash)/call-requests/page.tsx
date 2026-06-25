@@ -1,13 +1,17 @@
 import { supabaseAdmin } from '@/lib/supabase/admin'
+import Pagination from '@/components/Pagination'
 
 export const dynamic = 'force-dynamic'
+const PAGE_SIZE = 25
 
-export default async function CallRequestsPage() {
-  const { data: items } = await supabaseAdmin()
+export default async function CallRequestsPage({ searchParams }: { searchParams: { page?: string } }) {
+  const page = Math.max(1, parseInt(searchParams.page ?? '1', 10) || 1)
+  const fromRow = (page - 1) * PAGE_SIZE
+  const { data: items, count } = await supabaseAdmin()
     .from('call_requests')
-    .select('id, name, email, community, is_admin, note, created_at')
+    .select('id, name, email, community, is_admin, note, created_at', { count: 'exact' })
     .order('created_at', { ascending: false })
-    .limit(500)
+    .range(fromRow, fromRow + PAGE_SIZE - 1)
 
   return (
     <div className="max-w-3xl">
@@ -40,6 +44,8 @@ export default async function CallRequestsPage() {
           <p className="text-sm text-secondary">No call requests yet.</p>
         </div>
       )}
+
+      <Pagination page={page} pageSize={PAGE_SIZE} total={count ?? 0} basePath="/call-requests" />
     </div>
   )
 }

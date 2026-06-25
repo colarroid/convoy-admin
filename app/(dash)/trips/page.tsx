@@ -3,8 +3,10 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { getAdminUser } from '@/lib/auth'
+import Pagination from '@/components/Pagination'
 
 export const dynamic = 'force-dynamic'
+const PAGE_SIZE = 25
 
 async function cancelTrip(formData: FormData) {
   'use server'
@@ -33,10 +35,12 @@ function tripBadge(t: { status: string; departs_at: string | null; seats_open: n
 
 const STATUSES = ['open', 'completed', 'cancelled'] as const
 
-export default async function TripsPage({ searchParams }: { searchParams: { status?: string; community?: string } }) {
+export default async function TripsPage({ searchParams }: { searchParams: { status?: string; community?: string; page?: string } }) {
   const db = supabaseAdmin()
   const status = STATUSES.includes(searchParams.status as any) ? searchParams.status : ''
   const communityId = (searchParams.community ?? '').trim()
+  const page = Math.max(1, parseInt(searchParams.page ?? '1', 10) || 1)
+  const fromRow = (page - 1) * PAGE_SIZE
 
   const { data: communities } = await db.from('communities').select('id, name').order('name')
 
@@ -46,14 +50,14 @@ export default async function TripsPage({ searchParams }: { searchParams: { stat
       id, depart_date, depart_time, departs_at, pickup_point, status, seats_total, seats_open, created_at,
       host:profiles!trips_host_id_fkey ( first_name, last_name ),
       community:communities ( name, code )
-    `)
+    `, { count: 'exact' })
     .order('created_at', { ascending: false })
-    .limit(200)
+    .range(fromRow, fromRow + PAGE_SIZE - 1)
 
   if (status) query = query.eq('status', status)
   if (communityId) query = query.eq('community_id', communityId)
 
-  const { data: trips } = await query
+  const { data: trips, count } = await query
 
   const qs = (next: Record<string, string>) => {
     const p = new URLSearchParams()
@@ -136,6 +140,8 @@ export default async function TripsPage({ searchParams }: { searchParams: { stat
           </tbody>
         </table>
       </div>
+
+      <Pagination page={page} pageSize={PAGE_SIZE} total={count ?? 0} basePath="/trips" params={{ status, community: communityId }} />
     </div>
   )
 }

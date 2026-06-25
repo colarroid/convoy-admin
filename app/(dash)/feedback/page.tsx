@@ -1,19 +1,23 @@
 import { supabaseAdmin } from '@/lib/supabase/admin'
+import Pagination from '@/components/Pagination'
 
 export const dynamic = 'force-dynamic'
+const PAGE_SIZE = 25
 
 const name = (p: any) => [p?.first_name, p?.last_name].filter(Boolean).join(' ').trim() || 'Unknown'
 
-export default async function FeedbackPage() {
-  const { data: items } = await supabaseAdmin()
+export default async function FeedbackPage({ searchParams }: { searchParams: { page?: string } }) {
+  const page = Math.max(1, parseInt(searchParams.page ?? '1', 10) || 1)
+  const fromRow = (page - 1) * PAGE_SIZE
+  const { data: items, count } = await supabaseAdmin()
     .from('trip_feedback')
     .select(`
       id, reason, created_at,
       host:profiles!trip_feedback_host_id_fkey ( first_name, last_name ),
       trip:trips ( depart_date, community:communities ( name ) )
-    `)
+    `, { count: 'exact' })
     .order('created_at', { ascending: false })
-    .limit(200)
+    .range(fromRow, fromRow + PAGE_SIZE - 1)
 
   return (
     <div className="max-w-3xl">
@@ -45,6 +49,8 @@ export default async function FeedbackPage() {
           <p className="text-sm text-secondary">No feedback yet.</p>
         </div>
       )}
+
+      <Pagination page={page} pageSize={PAGE_SIZE} total={count ?? 0} basePath="/feedback" />
     </div>
   )
 }
