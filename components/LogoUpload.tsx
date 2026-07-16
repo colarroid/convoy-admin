@@ -2,10 +2,7 @@
 
 import { useState } from 'react'
 
-const CLOUD = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
-const PRESET = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET
-
-/** Unsigned Cloudinary logo upload. Writes the secure_url into a hidden `logo_url` input. */
+/** Server-signed Cloudinary logo upload. Writes the secure_url into a hidden `logo_url` input. */
 export default function LogoUpload({ defaultUrl = '' }: { defaultUrl?: string }) {
   const [url, setUrl] = useState(defaultUrl)
   const [uploading, setUploading] = useState(false)
@@ -17,11 +14,22 @@ export default function LogoUpload({ defaultUrl = '' }: { defaultUrl?: string })
     setUploading(true)
     setError('')
     try {
+      // Ask our server for a short-lived signature (admin-gated).
+      const signRes = await fetch('/api/cloudinary/sign', { method: 'POST' })
+      if (!signRes.ok) {
+        let detail = ''
+        try { detail = (await signRes.json())?.error ?? '' } catch { /* ignore */ }
+        throw new Error(detail || 'Could not prepare the upload.')
+      }
+      const { cloudName, apiKey, timestamp, signature, folder } = await signRes.json()
+
       const form = new FormData()
       form.append('file', file)
-      form.append('upload_preset', PRESET ?? '')
-      form.append('folder', 'veesaa/community-logos')
-      const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD}/image/upload`, { method: 'POST', body: form })
+      form.append('api_key', apiKey)
+      form.append('timestamp', String(timestamp))
+      form.append('signature', signature)
+      form.append('folder', folder)
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, { method: 'POST', body: form })
       const json = await res.json()
       if (!res.ok || !json.secure_url) throw new Error(json.error?.message ?? 'Upload failed')
       setUrl(json.secure_url)
