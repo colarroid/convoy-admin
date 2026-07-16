@@ -1,5 +1,5 @@
 // Mirrors the main app's REPORT_CATEGORIES so admins see the same labels the
-// reporter chose (keep in sync with convoy/lib/reports.ts).
+// reporter chose (keep in sync with the main Veesaa app's lib/reports.ts).
 const LABELS: Record<string, string> = {
   unsafe_driving: 'Unsafe driving',
   harassment: 'Harassment or threats',
