@@ -31,7 +31,8 @@ export default function Sidebar({ email }: { email: string }) {
   return (
     <aside className="w-60 shrink-0 border-r border-border bg-surface flex flex-col h-screen sticky top-0">
       <div className="px-5 h-16 flex items-center border-b border-border">
-        <span className="text-base font-semibold tracking-tight">Veesaa</span>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/veesaa-logo-black.svg" alt="Veesaa" className="h-[18px] w-auto" />
         <span className="ml-2 text-xs text-secondary">Admin</span>
       </div>
 

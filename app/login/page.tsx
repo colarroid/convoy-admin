@@ -40,8 +40,9 @@ export default function LoginPage() {
     <main className="min-h-screen flex items-center justify-center px-6">
       <div className="w-full max-w-sm">
         <div className="mb-8">
-          <p className="text-xl font-semibold tracking-tight">Veesaa</p>
-          <p className="text-sm text-secondary mt-1">Admin sign in</p>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/veesaa-logo-black.svg" alt="Veesaa" className="h-[22px] w-auto" />
+          <p className="text-sm text-secondary mt-3">Admin sign in</p>
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
