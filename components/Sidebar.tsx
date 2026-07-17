@@ -9,6 +9,7 @@ const NAV = [
   { href: '/communities', label: 'Communities' },
   { href: '/users', label: 'Users' },
   { href: '/trips', label: 'Trips' },
+  { href: '/ride-wants', label: 'Ride wants' },
   { href: '/reports', label: 'Reports' },
   { href: '/feedback', label: 'Trip feedback' },
   { href: '/experiences', label: 'Experiences' },
