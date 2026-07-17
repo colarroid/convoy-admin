@@ -5,14 +5,29 @@ import Pagination from '@/components/Pagination'
 export const dynamic = 'force-dynamic'
 const PAGE_SIZE = 25
 
-export default async function CommunitiesPage({ searchParams }: { searchParams: { page?: string } }) {
+const STATUS_STYLE: Record<string, string> = {
+  pending: 'bg-amber-50 text-amber-600',
+  active: 'bg-green-50 text-green-700',
+  rejected: 'bg-red-50 text-red-600',
+  suspended: 'bg-neutral text-secondary',
+}
+
+export default async function CommunitiesPage({ searchParams }: { searchParams: { page?: string; filter?: string } }) {
   const page = Math.max(1, parseInt(searchParams.page ?? '1', 10) || 1)
+  const pendingOnly = searchParams.filter === 'pending'
   const fromRow = (page - 1) * PAGE_SIZE
-  const { data: communities, count } = await supabaseAdmin()
+
+  let q = supabaseAdmin()
     .from('communities')
-    .select('id, code, name, area, logo_url, created_at', { count: 'exact' })
+    .select('id, code, name, area, logo_url, status, created_at', { count: 'exact' })
     .order('created_at', { ascending: false })
-    .range(fromRow, fromRow + PAGE_SIZE - 1)
+  if (pendingOnly) q = q.eq('status', 'pending')
+  const { data: communities, count } = await q.range(fromRow, fromRow + PAGE_SIZE - 1)
+
+  const { count: pendingCount } = await supabaseAdmin()
+    .from('communities')
+    .select('id', { count: 'exact', head: true })
+    .eq('status', 'pending')
 
   return (
     <div>
@@ -21,7 +36,13 @@ export default async function CommunitiesPage({ searchParams }: { searchParams: 
           <h1 className="text-2xl font-semibold tracking-tight" style={{ letterSpacing: '-0.96px' }}>Communities</h1>
           <p className="text-sm text-secondary mt-1">Codes members use to offer and find rides.</p>
         </div>
-        <Link href="/communities/new" className="btn-primary">New community</Link>
+        <div className="flex items-center gap-2">
+          <Link href="/communities" className={`btn-secondary ${pendingOnly ? '' : 'font-semibold'}`}>All</Link>
+          <Link href="/communities?filter=pending" className={`btn-secondary ${pendingOnly ? 'font-semibold' : ''}`}>
+            Pending{(pendingCount ?? 0) > 0 ? ` (${pendingCount})` : ''}
+          </Link>
+          <Link href="/communities/new" className="btn-primary">New community</Link>
+        </div>
       </div>
 
       <div className="card p-0 overflow-hidden">
@@ -32,6 +53,7 @@ export default async function CommunitiesPage({ searchParams }: { searchParams: 
               <th className="font-medium px-4 py-3">Code</th>
               <th className="font-medium px-4 py-3">Name</th>
               <th className="font-medium px-4 py-3">Area</th>
+              <th className="font-medium px-4 py-3">Status</th>
               <th className="font-medium px-4 py-3">Created</th>
             </tr>
           </thead>
@@ -50,10 +72,13 @@ export default async function CommunitiesPage({ searchParams }: { searchParams: 
                   <Link href={`/communities/${c.id}`} className="hover:underline">{c.name}</Link>
                 </td>
                 <td className="px-4 py-3 text-secondary">{c.area ?? '-'}</td>
+                <td className="px-4 py-3">
+                  <span className={`chip capitalize ${STATUS_STYLE[c.status] ?? 'bg-neutral text-secondary'}`}>{c.status}</span>
+                </td>
                 <td className="px-4 py-3 text-secondary">{new Date(c.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</td>
               </tr>
             )) : (
-              <tr><td colSpan={5} className="px-4 py-10 text-center text-secondary">No communities yet. Create the first one.</td></tr>
+              <tr><td colSpan={6} className="px-4 py-10 text-center text-secondary">{pendingOnly ? 'Nothing waiting for review.' : 'No communities yet. Create the first one.'}</td></tr>
             )}
           </tbody>
         </table>
