@@ -12,7 +12,7 @@ export function PageHeader({ title, sub, right }: { title: string; sub?: string;
     <div className="-mx-7 mb-8 border-b border-border px-7 py-4">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="min-w-0">
-          <p className="strip-title">{title}</p>
+          <p className="font-mono text-[13px] font-bold uppercase tracking-[0.025em] text-primary">{title}</p>
           {sub && <p className="mt-1.5 max-w-3xl text-sm text-secondary">{sub}</p>}
         </div>
         {right && <div className="shrink-0">{right}</div>}
