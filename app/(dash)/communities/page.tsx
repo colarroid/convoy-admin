@@ -39,8 +39,8 @@ export default async function CommunitiesPage({ searchParams }: { searchParams: 
       />
 
       <Toolbar>
-        <Link href="/communities" className={`chip ${pendingOnly ? 'bg-neutral text-secondary hover:bg-subtle' : 'bg-primary text-white'}`}>All</Link>
-        <Link href="/communities?filter=pending" className={`chip ${pendingOnly ? 'bg-primary text-white' : 'bg-neutral text-secondary hover:bg-subtle'}`}>
+        <Link href="/communities" className={`filter-pill ${pendingOnly ? 'bg-neutral text-secondary hover:bg-subtle' : 'bg-primary text-white'}`}>All</Link>
+        <Link href="/communities?filter=pending" className={`filter-pill ${pendingOnly ? 'bg-primary text-white' : 'bg-neutral text-secondary hover:bg-subtle'}`}>
           Pending{(pendingCount ?? 0) > 0 ? ` · ${pendingCount}` : ''}
         </Link>
       </Toolbar>

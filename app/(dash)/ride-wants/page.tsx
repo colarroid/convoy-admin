@@ -67,53 +67,49 @@ export default async function RideWantsPage({
       />
 
       {items && items.length > 0 ? (
-        <div className="mt-6 flex flex-col gap-3">
+        <div className="-mx-7 grid gap-px border-b border-border bg-border sm:grid-cols-2">
           {items.map((w: any) => {
             const rider = [w.rider?.first_name, w.rider?.last_name].filter(Boolean).join(' ')
             return (
-              <div key={w.id} className="card">
-                <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                  <span className="text-sm font-medium text-primary">{w.community?.name ?? w.code}</span>
-                  <span className="text-sm text-secondary">{rider || 'Member'}</span>
-                  {w.results_count === 0 ? (
-                    <span className="rounded-full bg-red-50 px-2 py-0.5 text-[11px] font-semibold text-red-600">
-                      No rides found
-                    </span>
-                  ) : (
-                    <span className="rounded-full bg-green-50 px-2 py-0.5 text-[11px] font-semibold text-green-700">
-                      {w.results_count} shown
-                    </span>
-                  )}
-                  {w.wants_notify && (
-                    <span className="rounded-full bg-blue-50 px-2 py-0.5 text-[11px] font-semibold text-blue-600">
-                      Wants notifying
-                    </span>
-                  )}
-                  {w.status === 'fulfilled' && (
-                    <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-[11px] font-semibold text-secondary">
-                      Notified
-                    </span>
-                  )}
-                  <span className="ml-auto text-xs text-secondary">
+              <div key={w.id} className="h-full bg-surface p-7">
+                <div className="flex items-baseline justify-between gap-3">
+                  <p className="font-mono text-[13px] font-bold uppercase tracking-[0.025em] text-primary">{w.community?.name ?? w.code}</p>
+                  <span className="shrink-0 text-[11px] text-secondary">
                     {new Date(w.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
                   </span>
                 </div>
+                <p className="mono-label mt-1">{rider || 'Member'}</p>
                 {w.starting_place && (
-                  <p className="mt-2 text-sm text-secondary">From: {w.starting_place}</p>
+                  <p className="mt-4 text-sm text-primary">From: {w.starting_place}</p>
                 )}
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {w.results_count === 0 ? (
+                    <span className="rounded-full bg-red-50 px-2 py-0.5 text-[11px] font-semibold text-red-600">No rides found</span>
+                  ) : (
+                    <span className="rounded-full bg-green-50 px-2 py-0.5 text-[11px] font-semibold text-green-700">{w.results_count} shown</span>
+                  )}
+                  {w.wants_notify && (
+                    <span className="rounded-full bg-blue-50 px-2 py-0.5 text-[11px] font-semibold text-blue-600">Wants notifying</span>
+                  )}
+                  {w.status === 'fulfilled' && (
+                    <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-[11px] font-semibold text-secondary">Notified</span>
+                  )}
+                </div>
               </div>
             )
           })}
         </div>
       ) : (
-        <div className="card text-center py-12">
+        <div className="card mt-8 text-center py-12">
           <p className="text-sm text-secondary">
             {unmetOnly ? 'No unmet searches yet. Good news.' : 'No ride searches recorded yet.'}
           </p>
         </div>
       )}
 
-      <Pagination page={page} pageSize={PAGE_SIZE} total={count ?? 0} basePath={base} />
+      <div className="mt-8">
+        <Pagination page={page} pageSize={PAGE_SIZE} total={count ?? 0} basePath={base} />
+      </div>
     </div>
   )
 }
