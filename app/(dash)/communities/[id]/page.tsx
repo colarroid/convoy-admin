@@ -81,7 +81,7 @@ export default async function CommunityDetailPage({ params }: { params: { id: st
         <div className="flex items-center gap-4">
           <div className="w-14 h-14 rounded-md overflow-hidden bg-white border border-border flex items-center justify-center shrink-0">
             {community.logo_url
-              ? <img src={community.logo_url} alt="" className="w-full h-full object-contain p-1" />
+              ? <img src={community.logo_url} alt="" className="w-full h-full object-contain" />
               : <span className="font-semibold text-secondary">{community.name?.[0]?.toUpperCase() ?? 'C'}</span>}
           </div>
           <div>

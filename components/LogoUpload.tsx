@@ -46,7 +46,7 @@ export default function LogoUpload({ defaultUrl = '' }: { defaultUrl?: string })
       <div className="flex items-center gap-4">
         <div className="w-16 h-16 rounded-md overflow-hidden bg-white border border-[var(--border,#E5E7EB)] flex items-center justify-center shrink-0">
           {url
-            ? <img src={url} alt="Logo preview" className="w-full h-full object-contain p-1" />
+            ? <img src={url} alt="Logo preview" className="w-full h-full object-contain" />
             : <span className="text-xs text-secondary">No logo</span>}
         </div>
         <label className="btn-secondary cursor-pointer">
