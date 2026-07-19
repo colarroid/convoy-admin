@@ -39,7 +39,7 @@ export function Band({ children, className = 'lg:grid-cols-4' }: { children: Rea
 
 export function BandCell({ label, value, href }: { label: string; value: React.ReactNode; href?: string }) {
   const inner = (
-    <div className={`bracket-hover h-full bg-surface p-7 ${href ? 'transition-colors hover:bg-subtle/50' : ''}`}>
+    <div className={`h-full bg-surface p-7 ${href ? 'transition-colors hover:bg-subtle/50' : ''}`}>
       <p className="mono-label">{label}</p>
       <p className="mt-3 font-mono text-4xl font-bold tracking-tight text-primary">{value}</p>
     </div>

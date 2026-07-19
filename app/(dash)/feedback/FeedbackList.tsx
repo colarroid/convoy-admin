@@ -60,7 +60,7 @@ export default function FeedbackList({ items }: { items: any[] }) {
             <button
               key={f.id}
               onClick={() => setOpen({ ...f, approved })}
-              className="bracket-hover h-full bg-surface p-7 text-left transition-colors hover:bg-subtle/50"
+              className="h-full bg-surface p-7 text-left transition-colors hover:bg-subtle/50"
             >
               <div className="flex items-baseline justify-between gap-3">
                 <p className="font-mono text-[13px] font-bold uppercase tracking-[0.025em] text-primary">{name(f.host)}</p>

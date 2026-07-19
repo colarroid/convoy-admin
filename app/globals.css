@@ -49,32 +49,12 @@ body {
 
   /* Status pills stay rounded, they read as indicators, not surfaces. */
   .chip { @apply inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium; }
-}
 
-/* Corner-bracket focus reticle on hover, for stat cells. */
-.bracket-hover { position: relative; }
-.bracket-hover::after {
-  content: '';
-  position: absolute;
-  inset: 6px;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.15s ease;
-  --c: #2563EB;
-  --s: 12px;
-  --t: 1.5px;
-  background:
-    linear-gradient(var(--c), var(--c)) 0 0 / var(--s) var(--t),
-    linear-gradient(var(--c), var(--c)) 0 0 / var(--t) var(--s),
-    linear-gradient(var(--c), var(--c)) 100% 0 / var(--s) var(--t),
-    linear-gradient(var(--c), var(--c)) 100% 0 / var(--t) var(--s),
-    linear-gradient(var(--c), var(--c)) 0 100% / var(--s) var(--t),
-    linear-gradient(var(--c), var(--c)) 0 100% / var(--t) var(--s),
-    linear-gradient(var(--c), var(--c)) 100% 100% / var(--s) var(--t),
-    linear-gradient(var(--c), var(--c)) 100% 100% / var(--t) var(--s);
-  background-repeat: no-repeat;
+  /* Filter tab: a button-sized pill for toolbar filters. */
+  .filter-pill {
+    @apply inline-flex items-center font-mono text-[11px] font-semibold uppercase tracking-[0.10em] px-[0.95rem] py-[0.5rem] transition-colors;
+  }
 }
-.bracket-hover:hover::after { opacity: 1; }
 
 /* ── Sheet table: edge-to-edge within the padded sheet, mono headers ── */
 .sheet-panel {

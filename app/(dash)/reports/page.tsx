@@ -77,9 +77,9 @@ export default async function ReportsPage({ searchParams }: { searchParams: { st
       <PageHeader title="Reports" sub="Safety reports filed by members. Review and take action." />
 
       <Toolbar>
-        <Link href="/reports" className={`chip ${!status ? 'bg-primary text-white' : 'bg-neutral text-secondary hover:bg-subtle'}`}>All</Link>
+        <Link href="/reports" className={`filter-pill ${!status ? 'bg-primary text-white' : 'bg-neutral text-secondary hover:bg-subtle'}`}>All</Link>
         {STATUSES.map(s => (
-          <Link key={s} href={`/reports?status=${s}`} className={`chip capitalize ${status === s ? 'bg-primary text-white' : 'bg-neutral text-secondary hover:bg-subtle'}`}>{s}</Link>
+          <Link key={s} href={`/reports?status=${s}`} className={`filter-pill ${status === s ? 'bg-primary text-white' : 'bg-neutral text-secondary hover:bg-subtle'}`}>{s}</Link>
         ))}
       </Toolbar>
 

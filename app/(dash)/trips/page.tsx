@@ -73,9 +73,9 @@ export default async function TripsPage({ searchParams }: { searchParams: { stat
       <PageHeader title="Trips" sub="Every posted ride. Cancel one if it breaks the rules." />
 
       <Toolbar>
-        <Link href={qs({ status: '' })} className={`chip ${!status ? 'bg-primary text-white' : 'bg-neutral text-secondary hover:bg-subtle'}`}>All</Link>
+        <Link href={qs({ status: '' })} className={`filter-pill ${!status ? 'bg-primary text-white' : 'bg-neutral text-secondary hover:bg-subtle'}`}>All</Link>
         {STATUSES.map(s => (
-          <Link key={s} href={qs({ status: s })} className={`chip capitalize ${status === s ? 'bg-primary text-white' : 'bg-neutral text-secondary hover:bg-subtle'}`}>{s}</Link>
+          <Link key={s} href={qs({ status: s })} className={`filter-pill ${status === s ? 'bg-primary text-white' : 'bg-neutral text-secondary hover:bg-subtle'}`}>{s}</Link>
         ))}
         <form className="ml-auto flex items-center gap-2">
           {status && <input type="hidden" name="status" value={status} />}
