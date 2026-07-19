@@ -9,13 +9,14 @@ import Link from 'next/link'
 
 export function PageHeader({ title, sub, right }: { title: string; sub?: string; right?: React.ReactNode }) {
   return (
-    <div className="mb-8">
-      {/* Compact section-title strip, matching the community dashboard. */}
-      <div className="-mx-7 flex items-center justify-between gap-4 border-b border-border px-7 py-3">
-        <p className="strip-title">{title}</p>
+    <div className="-mx-7 mb-8 border-b border-border px-7 py-4">
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div className="min-w-0">
+          <p className="strip-title">{title}</p>
+          {sub && <p className="mt-1.5 max-w-3xl text-sm text-secondary">{sub}</p>}
+        </div>
         {right && <div className="shrink-0">{right}</div>}
       </div>
-      {sub && <p className="mt-4 max-w-3xl text-sm text-secondary">{sub}</p>}
     </div>
   )
 }
