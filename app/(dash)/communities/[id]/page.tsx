@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { supabaseAdmin } from '@/lib/supabase/admin'
+import { Band, BandCell, SectionStrip } from '@/components/ui'
 import { approveCommunity, rejectCommunity, suspendCommunity, reactivateCommunity } from './actions'
 
 export const dynamic = 'force-dynamic'
@@ -33,7 +34,7 @@ export default async function CommunityDetailPage({ params }: { params: { id: st
   // Self-serve communities have an owner; admin-created ones may not.
   const { data: ownerRow } = await db
     .from('community_owners')
-    .select('user_id, created_at, owner:profiles ( first_name, last_name )')
+    .select('user_id, created_at, owner:profiles ( first_name, last_name, phone )')
     .eq('community_id', params.id)
     .maybeSingle()
   let ownerEmail: string | null = null
@@ -54,6 +55,15 @@ export default async function CommunityDetailPage({ params }: { params: { id: st
     .eq('community_id', params.id)
     .order('created_at', { ascending: false })
     .limit(50)
+
+  // Same figures the community manager sees on their own dashboard.
+  const [{ data: statsRows }, { data: areas }] = await Promise.all([
+    db.rpc('admin_community_stats', { p_community_id: params.id }),
+    db.rpc('admin_community_top_areas', { p_community_id: params.id }),
+  ])
+  const stats = (statsRows as any)?.[0] ?? null
+  const topAreas = (areas as any[]) ?? []
+  const maxAreaCount = topAreas.reduce((m, a) => Math.max(m, a.member_count), 0) || 1
 
   const approve = approveCommunity.bind(null, community.id)
   const suspend = suspendCommunity.bind(null, community.id)
@@ -97,6 +107,7 @@ export default async function CommunityDetailPage({ params }: { params: { id: st
             {ownerRow && (
               <p className="text-sm text-secondary mt-0.5">
                 Owner: {ownerName || 'Member'}{ownerEmail ? ` · ${ownerEmail}` : ''}
+                {(ownerRow.owner as any)?.phone ? ` · ${(ownerRow.owner as any).phone}` : ''}
               </p>
             )}
             {community.status === 'rejected' && community.review_note && (
@@ -137,6 +148,54 @@ export default async function CommunityDetailPage({ params }: { params: { id: st
         <dt className="text-secondary">Created</dt>
         <dd>{new Date(community.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</dd>
       </dl>
+
+      {/* ── Member and ride data, the same figures the community manager sees ── */}
+      <SectionStrip title="Last 30 days" />
+      <Band className="lg:grid-cols-4">
+        <BandCell label="Members" value={stats?.members_active ?? 0} />
+        <BandCell label="New members" value={stats?.members_new_30d ?? 0} />
+        <BandCell label="Ride searches" value={stats?.searches_30d ?? 0} />
+        <BandCell label="Unmet searches" value={stats?.unmet_30d ?? 0} />
+      </Band>
+
+      <div className="mt-8">
+        <SectionStrip title="All time" />
+        <Band className="lg:grid-cols-3">
+          <BandCell label="Open trips" value={stats?.trips_open ?? 0} />
+          <BandCell label="Completed trips" value={stats?.trips_completed ?? 0} />
+          <BandCell label="Kilometres shared" value={`${Math.round(stats?.km_shared ?? 0).toLocaleString()} km`} />
+        </Band>
+      </div>
+
+      <div className="mt-8 mb-8">
+        <SectionStrip title="Where members come from" />
+        {topAreas.length > 0 ? (
+          <div className="-mx-7 border-b border-border">
+            {topAreas.map((a: any, i: number) => {
+              const pct = Math.round((a.member_count / maxAreaCount) * 100)
+              return (
+                <div key={a.area} className={`flex items-center gap-6 px-7 py-4 ${i < topAreas.length - 1 ? 'border-b border-border' : ''}`}>
+                  <span className="w-6 shrink-0 font-mono text-sm font-semibold text-secondary/50">{i + 1}.</span>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-semibold text-primary">{a.area}</p>
+                    <p className="mono-label mt-0.5">{pct}% of top area</p>
+                  </div>
+                  <div className="hidden h-1 w-40 shrink-0 overflow-hidden bg-neutral sm:block">
+                    <div className="h-full bg-primary" style={{ width: `${pct}%` }} />
+                  </div>
+                  <p className="shrink-0 font-mono text-lg font-bold tracking-tight text-primary">{a.member_count}</p>
+                </div>
+              )
+            })}
+          </div>
+        ) : (
+          <div className="-mx-7 border-b border-border px-7 py-10 text-center">
+            <p className="text-sm text-secondary">
+              Appears once at least 3 members from the same area have offered or searched for rides.
+            </p>
+          </div>
+        )}
+      </div>
 
       <h2 className="text-sm font-medium mb-3">Trips in this community</h2>
       <div className="card p-0 overflow-hidden">

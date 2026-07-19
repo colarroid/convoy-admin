@@ -71,7 +71,7 @@ export default async function BroadcastsPage() {
     <div className="max-w-2xl">
       <PageHeader title="Broadcasts" sub="Notify everyone, or just the people active in one community." />
 
-      <form action={sendBroadcast} className="card flex flex-col gap-5 mb-10">
+      <form action={sendBroadcast} className="flex flex-col gap-5 mb-12 mt-8">
         <div>
           <label className="block text-sm font-medium mb-1.5">Send to</label>
           <select name="community" defaultValue="" className="field">
