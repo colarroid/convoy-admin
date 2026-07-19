@@ -44,9 +44,9 @@ export default function LogoUpload({ defaultUrl = '' }: { defaultUrl?: string })
     <div>
       <input type="hidden" name="logo_url" value={url} />
       <div className="flex items-center gap-4">
-        <div className="w-16 h-16 rounded-md overflow-hidden bg-neutral border border-[var(--border,#E5E7EB)] flex items-center justify-center shrink-0">
+        <div className="w-16 h-16 rounded-md overflow-hidden bg-white border border-[var(--border,#E5E7EB)] flex items-center justify-center shrink-0">
           {url
-            ? <img src={url} alt="Logo preview" className="w-full h-full object-cover" />
+            ? <img src={url} alt="Logo preview" className="w-full h-full object-contain p-1" />
             : <span className="text-xs text-secondary">No logo</span>}
         </div>
         <label className="btn-secondary cursor-pointer">

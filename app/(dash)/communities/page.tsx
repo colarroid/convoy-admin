@@ -61,9 +61,9 @@ export default async function CommunitiesPage({ searchParams }: { searchParams: 
             {communities && communities.length > 0 ? communities.map(c => (
               <tr key={c.id} className="border-b border-border last:border-0 hover:bg-subtle/60">
                 <td className="px-4 py-3">
-                  <div className="w-9 h-9 rounded-md overflow-hidden bg-neutral border border-border flex items-center justify-center shrink-0">
+                  <div className="w-9 h-9 rounded-md overflow-hidden bg-white border border-border flex items-center justify-center shrink-0">
                     {c.logo_url
-                      ? <img src={c.logo_url} alt="" className="w-full h-full object-cover" />
+                      ? <img src={c.logo_url} alt="" className="w-full h-full object-contain p-0.5" />
                       : <span className="text-xs font-semibold text-secondary">{c.name?.[0]?.toUpperCase() ?? 'C'}</span>}
                   </div>
                 </td>
