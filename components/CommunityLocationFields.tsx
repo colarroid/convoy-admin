@@ -4,6 +4,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { loadGoogleMaps } from '@/lib/googleMaps'
+import { PLACES_COUNTRIES } from '@/lib/countries'
 
 interface Prediction { placeId: string; main: string; secondary: string }
 
@@ -23,9 +24,6 @@ function areaFromComponents(components: any[]): string {
 }
 
 /** Address autocomplete + auto-filled (still editable) area, submitted as form fields. */
-// ISO country codes we bias Google Places to (keep in sync with main app launch countries).
-const PLACES_COUNTRIES = ['ng', 'ca']
-
 export default function CommunityLocationFields({
   addressName = 'address',
   areaName = 'area',

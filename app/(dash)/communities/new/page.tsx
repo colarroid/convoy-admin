@@ -4,6 +4,7 @@ import { supabaseAdmin } from '@/lib/supabase/admin'
 import { getAdminUser } from '@/lib/auth'
 import LogoUpload from '@/components/LogoUpload'
 import CommunityLocationFields from '@/components/CommunityLocationFields'
+import { COUNTRY_CODES } from '@/lib/countries'
 
 async function createCommunity(formData: FormData) {
   'use server'
@@ -57,8 +58,7 @@ export default function NewCommunityPage() {
           <label className="block text-sm font-medium mb-1.5">Country</label>
           <select name="country" className="field" defaultValue="">
             <option value="">Not set</option>
-            <option value="NG">Nigeria</option>
-            <option value="CA">Canada</option>
+            {COUNTRY_CODES.map(c => <option key={c.code} value={c.code}>{c.name}</option>)}
           </select>
           <p className="text-xs text-secondary mt-1.5">Used to group this community on the public Communities page.</p>
         </div>
