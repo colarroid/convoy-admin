@@ -70,7 +70,7 @@ export default async function ExperiencesPage({ searchParams }: { searchParams: 
       />
 
       {items && items.length > 0 ? (
-        <div className="flex flex-col gap-3">
+        <div className="mt-8 flex flex-col gap-3">
           {items.map((e: any) => (
             <div key={e.id} className={`card ${e.visible ? '' : 'opacity-60'}`}>
               <p className="text-sm text-primary whitespace-pre-wrap">{e.body}</p>
@@ -103,12 +103,14 @@ export default async function ExperiencesPage({ searchParams }: { searchParams: 
           ))}
         </div>
       ) : (
-        <div className="card text-center py-12">
+        <div className="card mt-8 text-center py-12">
           <p className="text-sm text-secondary">No experiences shared yet.</p>
         </div>
       )}
 
-      <Pagination page={page} pageSize={PAGE_SIZE} total={count ?? 0} basePath="/experiences" />
+      <div className="mt-8">
+        <Pagination page={page} pageSize={PAGE_SIZE} total={count ?? 0} basePath="/experiences" />
+      </div>
     </div>
   )
 }

@@ -84,7 +84,7 @@ export default async function ReportsPage({ searchParams }: { searchParams: { st
       </Toolbar>
 
       {reports && reports.length > 0 ? (
-        <div className="flex flex-col gap-4">
+        <div className="mt-8 flex flex-col gap-4">
           {reports.map((r: any) => (
             <div key={r.id} className="card">
               <div className="flex items-start justify-between gap-4 mb-3">
@@ -159,12 +159,14 @@ export default async function ReportsPage({ searchParams }: { searchParams: { st
           ))}
         </div>
       ) : (
-        <div className="card text-center py-12">
+        <div className="card mt-8 text-center py-12">
           <p className="text-sm text-secondary">{status ? `No ${status} reports.` : 'No reports filed. 🎉'}</p>
         </div>
       )}
 
-      <Pagination page={page} pageSize={PAGE_SIZE} total={count ?? 0} basePath="/reports" params={{ status }} />
+      <div className="mt-8">
+        <Pagination page={page} pageSize={PAGE_SIZE} total={count ?? 0} basePath="/reports" params={{ status }} />
+      </div>
     </div>
   )
 }

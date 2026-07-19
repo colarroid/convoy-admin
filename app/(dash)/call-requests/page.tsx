@@ -19,7 +19,7 @@ export default async function CallRequestsPage({ searchParams }: { searchParams:
       <PageHeader title="Call requests" sub="People asking to schedule a call about bringing Veesaa to their community." />
 
       {items && items.length > 0 ? (
-        <div className="flex flex-col gap-3">
+        <div className="mt-8 flex flex-col gap-3">
           {items.map((c: any) => (
             <div key={c.id} className="card">
               <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
@@ -38,12 +38,14 @@ export default async function CallRequestsPage({ searchParams }: { searchParams:
           ))}
         </div>
       ) : (
-        <div className="card text-center py-12">
+        <div className="card mt-8 text-center py-12">
           <p className="text-sm text-secondary">No call requests yet.</p>
         </div>
       )}
 
-      <Pagination page={page} pageSize={PAGE_SIZE} total={count ?? 0} basePath="/call-requests" />
+      <div className="mt-8">
+        <Pagination page={page} pageSize={PAGE_SIZE} total={count ?? 0} basePath="/call-requests" />
+      </div>
     </div>
   )
 }

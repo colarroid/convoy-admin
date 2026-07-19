@@ -9,7 +9,7 @@ import Link from 'next/link'
 
 export function PageHeader({ title, sub, right }: { title: string; sub?: string; right?: React.ReactNode }) {
   return (
-    <div className="-mx-7 mb-8 border-b border-border px-7 py-4">
+    <div className="-mx-7 border-b border-border px-7 py-4">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="min-w-0">
           <p className="font-mono text-[13px] font-bold uppercase tracking-[0.025em] text-primary">{title}</p>
@@ -24,7 +24,7 @@ export function PageHeader({ title, sub, right }: { title: string; sub?: string;
 /** Full-bleed toolbar row (filters, search) with a hairline underneath. */
 export function Toolbar({ children }: { children: React.ReactNode }) {
   return (
-    <div className="-mx-7 mb-8 flex flex-wrap items-center gap-2 border-b border-border px-7 pb-4">{children}</div>
+    <div className="-mx-7 flex flex-wrap items-center gap-2 border-b border-border px-7 py-4">{children}</div>
   )
 }
 
@@ -39,7 +39,7 @@ export function Band({ children, className = 'lg:grid-cols-4' }: { children: Rea
 
 export function BandCell({ label, value, href }: { label: string; value: React.ReactNode; href?: string }) {
   const inner = (
-    <div className={`h-full bg-surface p-7 ${href ? 'transition-colors hover:bg-subtle/50' : ''}`}>
+    <div className={`bracket-hover h-full bg-surface p-7 ${href ? 'transition-colors hover:bg-subtle/50' : ''}`}>
       <p className="mono-label">{label}</p>
       <p className="mt-3 font-mono text-4xl font-bold tracking-tight text-primary">{value}</p>
     </div>

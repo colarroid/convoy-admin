@@ -26,11 +26,11 @@ body {
 
   /* Squared mono actions. */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 font-mono text-[11px] font-semibold uppercase tracking-[0.10em] px-4 py-2.5
+    @apply inline-flex items-center justify-center gap-2 font-mono text-[11px] font-semibold uppercase tracking-[0.10em] px-[0.95rem] py-[0.5rem]
            bg-primary text-white hover:bg-black transition-colors disabled:opacity-50 disabled:pointer-events-none;
   }
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 font-mono text-[11px] font-semibold uppercase tracking-[0.10em] px-4 py-2.5
+    @apply inline-flex items-center justify-center gap-2 font-mono text-[11px] font-semibold uppercase tracking-[0.10em] px-[0.95rem] py-[0.5rem]
            bg-surface text-primary border border-border hover:bg-subtle transition-colors disabled:opacity-50 disabled:pointer-events-none;
   }
 
@@ -50,6 +50,31 @@ body {
   /* Status pills stay rounded, they read as indicators, not surfaces. */
   .chip { @apply inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium; }
 }
+
+/* Corner-bracket focus reticle on hover, for stat cells. */
+.bracket-hover { position: relative; }
+.bracket-hover::after {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  --c: #2563EB;
+  --s: 12px;
+  --t: 1.5px;
+  background:
+    linear-gradient(var(--c), var(--c)) 0 0 / var(--s) var(--t),
+    linear-gradient(var(--c), var(--c)) 0 0 / var(--t) var(--s),
+    linear-gradient(var(--c), var(--c)) 100% 0 / var(--s) var(--t),
+    linear-gradient(var(--c), var(--c)) 100% 0 / var(--t) var(--s),
+    linear-gradient(var(--c), var(--c)) 0 100% / var(--s) var(--t),
+    linear-gradient(var(--c), var(--c)) 0 100% / var(--t) var(--s),
+    linear-gradient(var(--c), var(--c)) 100% 100% / var(--s) var(--t),
+    linear-gradient(var(--c), var(--c)) 100% 100% / var(--t) var(--s);
+  background-repeat: no-repeat;
+}
+.bracket-hover:hover::after { opacity: 1; }
 
 /* ── Sheet table: edge-to-edge within the padded sheet, mono headers ── */
 .sheet-panel {
