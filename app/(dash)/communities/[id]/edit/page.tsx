@@ -71,11 +71,6 @@ export default async function EditCommunityPage({ params }: { params: { id: stri
             <option value="">Not set</option>
             <option value="NG">Nigeria</option>
             <option value="CA">Canada</option>
-            <option value="US">United States</option>
-            <option value="GB">United Kingdom</option>
-            <option value="GH">Ghana</option>
-            <option value="KE">Kenya</option>
-            <option value="ZA">South Africa</option>
           </select>
         </div>
 
