@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { categoryLabel } from '@/lib/reportCategories'
+import { PageHeader, Band, BandCell, SectionStrip } from '@/components/ui'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -12,20 +13,11 @@ async function count(table: string, build?: (q: any) => any) {
   return count ?? 0
 }
 
-function Stat({ label, value, href }: { label: string; value: number; href?: string }) {
-  const inner = (
-    <div className="card hover:border-primary/30 transition-colors">
-      <p className="text-sm text-secondary">{label}</p>
-      <p className="text-3xl font-semibold tracking-tight mt-1">{value}</p>
-    </div>
-  )
-  return href ? <Link href={href}>{inner}</Link> : inner
-}
-
 export default async function OverviewPage() {
-  const [users, communities, openTrips, pendingReq, openReports] = await Promise.all([
+  const [users, communities, pendingComms, openTrips, pendingReq, openReports] = await Promise.all([
     count('profiles'),
     count('communities'),
+    count('communities', (q) => q.eq('status', 'pending')),
     // Active = open/full and still upcoming. Past unconfirmed trips are
     // "awaiting confirmation", not active.
     count('trips', (q) => q.in('status', ['open', 'full']).gte('departs_at', new Date().toISOString())),
@@ -42,37 +34,37 @@ export default async function OverviewPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold tracking-tight mb-1" style={{ letterSpacing: '-0.96px' }}>Overview</h1>
-      <p className="text-sm text-secondary mb-8">A snapshot of the platform.</p>
+      <PageHeader title="Overview" sub="A snapshot of the platform." />
 
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-10">
-        <Stat label="Users" value={users} href="/users" />
-        <Stat label="Communities" value={communities} href="/communities" />
-        <Stat label="Active rides" value={openTrips} href="/trips" />
-        <Stat label="Pending requests" value={pendingReq} href="/trips" />
-        <Stat label="Open reports" value={openReports} href="/reports" />
-      </div>
+      <Band className="lg:grid-cols-3">
+        <BandCell label="Users" value={users} href="/users" />
+        <BandCell label="Communities" value={communities} href="/communities" />
+        <BandCell label="Pending review" value={pendingComms} href="/communities?filter=pending" />
+        <BandCell label="Active rides" value={openTrips} href="/trips" />
+        <BandCell label="Pending requests" value={pendingReq} href="/trips" />
+        <BandCell label="Open reports" value={openReports} href="/reports" />
+      </Band>
 
-      <div className="card">
-        <div className="flex items-center justify-between mb-4">
-          <p className="text-sm font-medium">Open reports</p>
-          <Link href="/reports" className="text-sm text-tertiary hover:underline">View all</Link>
+      <SectionStrip
+        title="Open reports"
+        right={<Link href="/reports?status=open" className="font-mono text-[10px] font-semibold uppercase tracking-[0.10em] text-secondary transition-colors hover:text-primary">View all</Link>}
+      />
+      {recentReports && recentReports.length > 0 ? (
+        <ul className="-mx-7 border-b border-border">
+          {recentReports.map(r => (
+            <li key={r.id} className="border-b border-border last:border-0">
+              <Link href="/reports?status=open" className="flex items-center justify-between px-7 py-4 transition-colors hover:bg-subtle/40">
+                <span className="text-sm text-primary">{categoryLabel(r.category)}</span>
+                <span className="font-mono text-xs text-secondary">{new Date(r.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div className="-mx-7 border-b border-border px-7 py-10 text-center">
+          <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.10em] text-secondary">No open reports</p>
         </div>
-        {recentReports && recentReports.length > 0 ? (
-          <ul className="divide-y divide-border">
-            {recentReports.map(r => (
-              <li key={r.id}>
-                <Link href="/reports?status=open" className="py-2.5 flex items-center justify-between hover:text-tertiary transition-colors">
-                  <span className="text-sm">{categoryLabel(r.category)}</span>
-                  <span className="text-xs text-secondary">{new Date(r.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="text-sm text-secondary py-2">No open reports. 🎉</p>
-        )}
-      </div>
+      )}
     </div>
   )
 }

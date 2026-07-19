@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import Pagination from '@/components/Pagination'
+import { PageHeader, Toolbar } from '@/components/ui'
 
 export const dynamic = 'force-dynamic'
 const PAGE_SIZE = 25
@@ -31,21 +32,20 @@ export default async function CommunitiesPage({ searchParams }: { searchParams: 
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight" style={{ letterSpacing: '-0.96px' }}>Communities</h1>
-          <p className="text-sm text-secondary mt-1">Codes members use to offer and find rides.</p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Link href="/communities" className={`btn-secondary ${pendingOnly ? '' : 'font-semibold'}`}>All</Link>
-          <Link href="/communities?filter=pending" className={`btn-secondary ${pendingOnly ? 'font-semibold' : ''}`}>
-            Pending{(pendingCount ?? 0) > 0 ? ` (${pendingCount})` : ''}
-          </Link>
-          <Link href="/communities/new" className="btn-primary">New community</Link>
-        </div>
-      </div>
+      <PageHeader
+        title="Communities"
+        sub="Codes members use to offer and find rides."
+        right={<Link href="/communities/new" className="btn-primary">New community</Link>}
+      />
 
-      <div className="card p-0 overflow-hidden">
+      <Toolbar>
+        <Link href="/communities" className={`chip ${pendingOnly ? 'bg-neutral text-secondary hover:bg-subtle' : 'bg-primary text-white'}`}>All</Link>
+        <Link href="/communities?filter=pending" className={`chip ${pendingOnly ? 'bg-primary text-white' : 'bg-neutral text-secondary hover:bg-subtle'}`}>
+          Pending{(pendingCount ?? 0) > 0 ? ` · ${pendingCount}` : ''}
+        </Link>
+      </Toolbar>
+
+      <div className="sheet-panel">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-border text-left text-secondary">

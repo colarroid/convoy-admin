@@ -1,5 +1,6 @@
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import Pagination from '@/components/Pagination'
+import { PageHeader, Band, BandCell, SectionStrip } from '@/components/ui'
 
 export const dynamic = 'force-dynamic'
 const PAGE_SIZE = 25
@@ -43,38 +44,30 @@ export default async function RideWantsPage({
   const base = `/ride-wants${unmetOnly ? '' : '?filter=all'}`
 
   return (
-    <div className="max-w-3xl">
-      <div className="mb-8">
-        <h1 className="text-2xl font-semibold tracking-tight" style={{ letterSpacing: '-0.96px' }}>
-          Ride wants
-        </h1>
-        <p className="text-sm text-secondary mt-1">
-          Every ride search, and what it returned. Searches with no results are unmet demand:
-          the clearest signal of where a community needs hosts.
-        </p>
-      </div>
+    <div>
+      <PageHeader
+        title="Ride wants"
+        sub="Every ride search, and what it returned. Searches with no results are unmet demand: the clearest signal of where a community needs hosts."
+      />
 
-      <div className="card mb-6 flex flex-wrap items-center gap-x-8 gap-y-3">
-        <div>
-          <p className="text-xs text-secondary">Searches</p>
-          <p className="text-xl font-semibold text-primary">{totalAll ?? 0}</p>
-        </div>
-        <div>
-          <p className="text-xs text-secondary">Unmet</p>
-          <p className="text-xl font-semibold text-primary">{totalUnmet ?? 0}</p>
-        </div>
-        <div>
-          <p className="text-xs text-secondary">Unmet rate</p>
-          <p className="text-xl font-semibold text-primary">{unmetPct}%</p>
-        </div>
-        <div className="ml-auto flex gap-2">
-          <a href="/ride-wants" className={`btn-secondary ${unmetOnly ? 'font-semibold' : ''}`}>Unmet only</a>
-          <a href="/ride-wants?filter=all" className={`btn-secondary ${unmetOnly ? '' : 'font-semibold'}`}>All</a>
-        </div>
-      </div>
+      <Band className="lg:grid-cols-3">
+        <BandCell label="Searches" value={totalAll ?? 0} />
+        <BandCell label="Unmet" value={totalUnmet ?? 0} />
+        <BandCell label="Unmet rate" value={`${unmetPct}%`} />
+      </Band>
+
+      <SectionStrip
+        title={unmetOnly ? 'Unmet searches' : 'All searches'}
+        right={
+          <span className="flex gap-3">
+            <a href="/ride-wants" className={`font-mono text-[10px] font-semibold uppercase tracking-[0.10em] ${unmetOnly ? 'text-primary' : 'text-secondary hover:text-primary'}`}>Unmet</a>
+            <a href="/ride-wants?filter=all" className={`font-mono text-[10px] font-semibold uppercase tracking-[0.10em] ${unmetOnly ? 'text-secondary hover:text-primary' : 'text-primary'}`}>All</a>
+          </span>
+        }
+      />
 
       {items && items.length > 0 ? (
-        <div className="flex flex-col gap-3">
+        <div className="mt-6 flex flex-col gap-3">
           {items.map((w: any) => {
             const rider = [w.rider?.first_name, w.rider?.last_name].filter(Boolean).join(' ')
             return (

@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { getAdminUser } from '@/lib/auth'
 import Pagination from '@/components/Pagination'
+import { PageHeader, Toolbar } from '@/components/ui'
 
 export const dynamic = 'force-dynamic'
 const PAGE_SIZE = 25
@@ -69,12 +70,9 @@ export default async function TripsPage({ searchParams }: { searchParams: { stat
 
   return (
     <div>
-      <div className="mb-6">
-        <h1 className="text-2xl font-semibold tracking-tight" style={{ letterSpacing: '-0.96px' }}>Trips</h1>
-        <p className="text-sm text-secondary mt-1">Every posted ride. Cancel one if it breaks the rules.</p>
-      </div>
+      <PageHeader title="Trips" sub="Every posted ride. Cancel one if it breaks the rules." />
 
-      <div className="flex flex-wrap items-center gap-2 mb-6">
+      <Toolbar>
         <Link href={qs({ status: '' })} className={`chip ${!status ? 'bg-primary text-white' : 'bg-neutral text-secondary hover:bg-subtle'}`}>All</Link>
         {STATUSES.map(s => (
           <Link key={s} href={qs({ status: s })} className={`chip capitalize ${status === s ? 'bg-primary text-white' : 'bg-neutral text-secondary hover:bg-subtle'}`}>{s}</Link>
@@ -87,9 +85,9 @@ export default async function TripsPage({ searchParams }: { searchParams: { stat
           </select>
           <button className="btn-secondary">Filter</button>
         </form>
-      </div>
+      </Toolbar>
 
-      <div className="card p-0 overflow-hidden">
+      <div className="sheet-panel">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-border text-left text-secondary">

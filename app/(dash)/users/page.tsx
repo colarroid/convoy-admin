@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { getAdminUser } from '@/lib/auth'
 import Pagination from '@/components/Pagination'
+import { PageHeader } from '@/components/ui'
 
 export const dynamic = 'force-dynamic'
 const PAGE_SIZE = 25
@@ -43,19 +44,19 @@ export default async function UsersPage({ searchParams }: { searchParams: { q?: 
 
   return (
     <div>
-      <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight" style={{ letterSpacing: '-0.96px' }}>Users</h1>
-          <p className="text-sm text-secondary mt-1">Members across all communities. Suspend to block access.</p>
-        </div>
-        <form className="flex items-center gap-2">
-          <input name="q" defaultValue={q} placeholder="Search name or phone…" className="field !w-64" />
-          <button className="btn-secondary">Search</button>
-          {q && <Link href="/users" className="text-sm text-secondary hover:text-primary">Clear</Link>}
-        </form>
-      </div>
+      <PageHeader
+        title="Users"
+        sub="Members across all communities. Suspend to block access."
+        right={
+          <form className="flex items-center gap-2">
+            <input name="q" defaultValue={q} placeholder="Search name or phone…" className="field !w-56" />
+            <button className="btn-secondary">Search</button>
+            {q && <Link href="/users" className="font-mono text-[10px] font-semibold uppercase tracking-[0.10em] text-secondary hover:text-primary">Clear</Link>}
+          </form>
+        }
+      />
 
-      <div className="card p-0 overflow-hidden">
+      <div className="sheet-panel">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-border text-left text-secondary">

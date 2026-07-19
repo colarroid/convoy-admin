@@ -2,6 +2,7 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { getAdminUser } from '@/lib/auth'
+import { PageHeader, SectionStrip } from '@/components/ui'
 
 export const dynamic = 'force-dynamic'
 
@@ -68,10 +69,7 @@ export default async function BroadcastsPage() {
 
   return (
     <div className="max-w-2xl">
-      <div className="mb-8">
-        <h1 className="text-2xl font-semibold tracking-tight" style={{ letterSpacing: '-0.96px' }}>Broadcasts</h1>
-        <p className="text-sm text-secondary mt-1">Notify everyone, or just the people active in one community.</p>
-      </div>
+      <PageHeader title="Broadcasts" sub="Notify everyone, or just the people active in one community." />
 
       <form action={sendBroadcast} className="card flex flex-col gap-5 mb-10">
         <div>
@@ -100,12 +98,12 @@ export default async function BroadcastsPage() {
         </div>
       </form>
 
-      <h2 className="text-sm font-medium mb-3">Recent broadcasts</h2>
-      <div className="card p-0 overflow-hidden">
+      <SectionStrip title="Recent broadcasts" />
+      <div className="-mx-7 border-b border-border">
         {history && history.length > 0 ? (
           <ul className="divide-y divide-border">
             {history.map((b: any) => (
-              <li key={b.id} className="px-4 py-3.5">
+              <li key={b.id} className="px-7 py-4">
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0">
                     <p className="font-medium truncate">{b.title}</p>
@@ -129,3 +127,4 @@ export default async function BroadcastsPage() {
     </div>
   )
 }
+

@@ -1,5 +1,6 @@
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import Pagination from '@/components/Pagination'
+import { PageHeader } from '@/components/ui'
 
 export const dynamic = 'force-dynamic'
 const PAGE_SIZE = 25
@@ -14,11 +15,8 @@ export default async function CallRequestsPage({ searchParams }: { searchParams:
     .range(fromRow, fromRow + PAGE_SIZE - 1)
 
   return (
-    <div className="max-w-3xl">
-      <div className="mb-8">
-        <h1 className="text-2xl font-semibold tracking-tight" style={{ letterSpacing: '-0.96px' }}>Call requests</h1>
-        <p className="text-sm text-secondary mt-1">People asking to schedule a call about bringing Veesaa to their community.</p>
-      </div>
+    <div>
+      <PageHeader title="Call requests" sub="People asking to schedule a call about bringing Veesaa to their community." />
 
       {items && items.length > 0 ? (
         <div className="flex flex-col gap-3">

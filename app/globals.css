@@ -15,26 +15,66 @@ body {
 }
 
 @layer components {
+  /* Mono micro-label, the telemetry-sheet vocabulary. */
+  .mono-label {
+    @apply font-mono text-[10px] font-semibold uppercase tracking-[0.10em] text-secondary;
+  }
+  /* Section-strip title. */
+  .strip-title {
+    @apply font-mono text-[11px] font-semibold uppercase tracking-[0.025em] text-primary;
+  }
+
+  /* Squared mono actions. */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 h-10 px-4 rounded-full bg-primary text-white text-sm font-medium
-           hover:bg-black active:scale-[0.99] transition-all disabled:opacity-50 disabled:pointer-events-none;
+    @apply inline-flex items-center justify-center gap-2 font-mono text-[11px] font-semibold uppercase tracking-[0.10em] px-4 py-2.5
+           bg-primary text-white hover:bg-black transition-colors disabled:opacity-50 disabled:pointer-events-none;
   }
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 h-10 px-4 rounded-full bg-surface text-primary text-sm font-medium border border-border
-           hover:bg-subtle active:scale-[0.99] transition-all disabled:opacity-50 disabled:pointer-events-none;
+    @apply inline-flex items-center justify-center gap-2 font-mono text-[11px] font-semibold uppercase tracking-[0.10em] px-4 py-2.5
+           bg-surface text-primary border border-border hover:bg-subtle transition-colors disabled:opacity-50 disabled:pointer-events-none;
   }
+
+  /* Squared fields. */
   .field {
-    @apply w-full h-10 px-3.5 rounded-full bg-surface border border-border text-sm text-primary placeholder-secondary
-           focus:outline-none focus:ring-2 focus:ring-primary/15 focus:border-primary transition-all;
+    @apply w-full h-11 px-3.5 bg-surface border border-border text-sm text-primary placeholder-secondary
+           focus:outline-none focus:border-primary transition-colors;
   }
   .field-area {
-    @apply w-full px-3.5 py-2.5 rounded-lg bg-surface border border-border text-sm text-primary placeholder-secondary
-           focus:outline-none focus:ring-2 focus:ring-primary/15 focus:border-primary transition-all resize-none;
+    @apply w-full px-3.5 py-2.5 bg-surface border border-border text-sm text-primary placeholder-secondary
+           focus:outline-none focus:border-primary transition-colors resize-none;
   }
-  .card {
-    @apply bg-surface border border-border rounded-md p-4;
-  }
-  .chip {
-    @apply inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium;
-  }
+
+  /* Ruled square panel (replaces the old rounded card). */
+  .card { @apply bg-surface border border-border p-5; }
+
+  /* Status pills stay rounded, they read as indicators, not surfaces. */
+  .chip { @apply inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium; }
 }
+
+/* ── Sheet table: edge-to-edge within the padded sheet, mono headers ── */
+.sheet-panel {
+  margin-left: -1.75rem;   /* cancel the sheet's px-7 so rules reach the frame */
+  margin-right: -1.75rem;
+  border-top: 1px solid #E5E7EB;
+  border-bottom: 1px solid #E5E7EB;
+  overflow-x: auto;
+  background: #FFFFFF;
+}
+.sheet-panel table { width: 100%; font-size: 14px; }
+.sheet-panel thead th {
+  font-family: var(--font-geist-mono), monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.10em;
+  font-size: 10px;
+  font-weight: 600;
+  color: #6B7280;
+  text-align: left;
+  padding: 12px 24px;
+  border-bottom: 1px solid #E5E7EB;
+  background: #FAFAFA;
+  white-space: nowrap;
+}
+.sheet-panel thead th.text-right { text-align: right; }
+.sheet-panel tbody td { padding: 16px 24px; border-bottom: 1px solid #E5E7EB; vertical-align: top; }
+.sheet-panel tbody tr:last-child td { border-bottom: 0; }
+.sheet-panel tbody tr:hover td { background: rgba(243, 244, 246, 0.5); }

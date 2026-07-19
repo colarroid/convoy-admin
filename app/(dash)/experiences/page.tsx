@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { getAdminUser } from '@/lib/auth'
 import Pagination from '@/components/Pagination'
+import { PageHeader } from '@/components/ui'
 
 export const dynamic = 'force-dynamic'
 
@@ -62,13 +63,11 @@ export default async function ExperiencesPage({ searchParams }: { searchParams: 
     .eq('pinned', true)
 
   return (
-    <div className="max-w-3xl">
-      <div className="mb-6">
-        <h1 className="text-2xl font-semibold tracking-tight" style={{ letterSpacing: '-0.96px' }}>Experiences</h1>
-        <p className="text-sm text-secondary mt-1">
-          Member testimonials. Pin up to {MAX_PINNED} to feature on the landing page ({pinnedCount ?? 0}/{MAX_PINNED} pinned). Hide anything off-brand.
-        </p>
-      </div>
+    <div>
+      <PageHeader
+        title="Experiences"
+        sub={`Member testimonials. Pin up to ${MAX_PINNED} to feature on the landing page (${pinnedCount ?? 0}/${MAX_PINNED} pinned). Hide anything off-brand.`}
+      />
 
       {items && items.length > 0 ? (
         <div className="flex flex-col gap-3">

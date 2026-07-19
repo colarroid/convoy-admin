@@ -30,30 +30,38 @@ export default function Sidebar({ email }: { email: string }) {
   }
 
   return (
-    <aside className="w-60 shrink-0 border-r border-border bg-surface flex flex-col h-screen sticky top-0">
-      <div className="px-5 h-16 flex items-center border-b border-border">
+    <aside className="sticky top-0 flex h-screen w-60 shrink-0 flex-col border-r border-border bg-surface">
+      <div className="flex h-16 items-center gap-2.5 border-b border-border px-5">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/veesaa-logo-black.svg" alt="Veesaa" className="h-[18px] w-auto" />
-        <span className="ml-2 text-xs text-secondary">Admin</span>
+        <img src="/veesaa-logo-black.svg" alt="Veesaa" className="h-[16px] w-auto" />
+        <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.10em] text-secondary">Admin</span>
       </div>
 
-      <nav className="flex-1 px-3 py-4 flex flex-col gap-0.5">
-        {NAV.map(item => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={`px-3 py-2 rounded-md text-sm transition-colors ${
-              isActive(item.href) ? 'bg-subtle text-primary font-medium' : 'text-secondary hover:text-primary hover:bg-subtle'
-            }`}
-          >
-            {item.label}
-          </Link>
-        ))}
+      <nav className="flex-1 overflow-y-auto py-3">
+        {NAV.map(item => {
+          const active = isActive(item.href)
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`flex items-center border-l-2 px-5 py-2.5 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] transition-colors ${
+                active
+                  ? 'border-primary bg-subtle text-primary'
+                  : 'border-transparent text-secondary hover:bg-subtle/60 hover:text-primary'
+              }`}
+            >
+              {item.label}
+            </Link>
+          )
+        })}
       </nav>
 
-      <div className="px-3 py-4 border-t border-border">
-        <p className="px-3 text-xs text-secondary truncate mb-2">{email}</p>
-        <button onClick={signOut} className="w-full text-left px-3 py-2 rounded-md text-sm text-secondary hover:text-error hover:bg-subtle transition-colors">
+      <div className="border-t border-border px-5 py-4">
+        <p className="truncate text-xs text-secondary">{email}</p>
+        <button
+          onClick={signOut}
+          className="mt-2 font-mono text-[10px] font-semibold uppercase tracking-[0.10em] text-secondary transition-colors hover:text-error"
+        >
           Sign out
         </button>
       </div>

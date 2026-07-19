@@ -7,10 +7,17 @@ export default async function DashLayout({ children }: { children: React.ReactNo
   if (!user) redirect('/login')
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-neutral">
       <Sidebar email={user.email ?? ''} />
-      <main className="flex-1 min-w-0">
-        <div className="max-w-5xl mx-auto px-8 py-10">{children}</div>
+      <main className="min-w-0 flex-1">
+        {/* Rule-framed sheet: panels break out of px-7 to touch the frame. */}
+        <div className="mx-auto flex min-h-screen max-w-5xl flex-col border-x border-border bg-surface">
+          <div className="flex-1 px-7 py-8">{children}</div>
+          <footer className="flex flex-wrap items-center justify-between gap-3 border-t border-border px-7 py-5">
+            <p className="text-sm text-secondary">© {new Date().getFullYear()} VZA Technologies Limited</p>
+            <p className="text-sm text-secondary">Veesaa Admin</p>
+          </footer>
+        </div>
       </main>
     </div>
   )

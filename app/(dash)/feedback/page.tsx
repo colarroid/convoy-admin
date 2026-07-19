@@ -1,5 +1,6 @@
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import Pagination from '@/components/Pagination'
+import { PageHeader } from '@/components/ui'
 
 export const dynamic = 'force-dynamic'
 const PAGE_SIZE = 25
@@ -25,11 +26,8 @@ export default async function FeedbackPage({ searchParams }: { searchParams: { p
     .range(fromRow, fromRow + PAGE_SIZE - 1)
 
   return (
-    <div className="max-w-3xl">
-      <div className="mb-8">
-        <h1 className="text-2xl font-semibold tracking-tight" style={{ letterSpacing: '-0.96px' }}>Trip feedback</h1>
-        <p className="text-sm text-secondary mt-1">Reasons hosts gave when cancelling a ride, or when a trip didn&apos;t happen, and who was on board.</p>
-      </div>
+    <div>
+      <PageHeader title="Trip feedback" sub="Reasons hosts gave when cancelling a ride, or when a trip didn't happen, and who was on board." />
 
       {items && items.length > 0 ? (
         <div className="flex flex-col gap-3">

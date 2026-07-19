@@ -5,6 +5,7 @@ import { supabaseAdmin } from '@/lib/supabase/admin'
 import { getAdminUser } from '@/lib/auth'
 import { categoryLabel } from '@/lib/reportCategories'
 import Pagination from '@/components/Pagination'
+import { PageHeader, Toolbar } from '@/components/ui'
 
 export const dynamic = 'force-dynamic'
 const PAGE_SIZE = 25
@@ -72,18 +73,15 @@ export default async function ReportsPage({ searchParams }: { searchParams: { st
   const { data: reports, count } = await query
 
   return (
-    <div className="max-w-3xl">
-      <div className="mb-6">
-        <h1 className="text-2xl font-semibold tracking-tight" style={{ letterSpacing: '-0.96px' }}>Reports</h1>
-        <p className="text-sm text-secondary mt-1">Safety reports filed by members. Review and take action.</p>
-      </div>
+    <div>
+      <PageHeader title="Reports" sub="Safety reports filed by members. Review and take action." />
 
-      <div className="flex flex-wrap items-center gap-2 mb-6">
+      <Toolbar>
         <Link href="/reports" className={`chip ${!status ? 'bg-primary text-white' : 'bg-neutral text-secondary hover:bg-subtle'}`}>All</Link>
         {STATUSES.map(s => (
           <Link key={s} href={`/reports?status=${s}`} className={`chip capitalize ${status === s ? 'bg-primary text-white' : 'bg-neutral text-secondary hover:bg-subtle'}`}>{s}</Link>
         ))}
-      </div>
+      </Toolbar>
 
       {reports && reports.length > 0 ? (
         <div className="flex flex-col gap-4">
