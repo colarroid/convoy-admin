@@ -30,7 +30,7 @@ export function Toolbar({ children }: { children: React.ReactNode }) {
 /** Grid of stat cells with hairline rules between them (gap-px on a border bg). */
 export function Band({ children, className = 'lg:grid-cols-4' }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={`-mx-7 mb-8 grid gap-px border-y border-border bg-border sm:grid-cols-2 ${className}`}>
+    <div className={`-mx-7 grid gap-px border-y border-border bg-border sm:grid-cols-2 ${className}`}>
       {children}
     </div>
   )

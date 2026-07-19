@@ -19,9 +19,9 @@ body {
   .mono-label {
     @apply font-mono text-[10px] font-semibold uppercase tracking-[0.10em] text-secondary;
   }
-  /* Section-strip title. */
+  /* Section-strip title, matches the community dashboard exactly. */
   .strip-title {
-    @apply font-mono text-[11px] font-semibold uppercase tracking-[0.025em] text-primary;
+    @apply font-mono text-[10px] font-semibold uppercase tracking-[0.025em] text-primary;
   }
 
   /* Squared mono actions. */
