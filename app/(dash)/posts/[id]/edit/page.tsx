@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic'
 export default async function EditPostPage({ params }: { params: { id: string } }) {
   const { data: post } = await supabaseAdmin()
     .from('posts')
-    .select('id, slug, title, excerpt, body_md, cover_url, category, author_name, status, published_at')
+    .select('id, slug, title, excerpt, meta_description, body_md, cover_url, category, author_name, status, published_at')
     .eq('id', params.id)
     .maybeSingle()
 

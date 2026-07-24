@@ -10,11 +10,45 @@ export interface PostFormValues {
   slug?: string
   title?: string
   excerpt?: string | null
+  meta_description?: string | null
   body_md?: string
   cover_url?: string | null
   category?: string | null
   author_name?: string | null
   status?: string
+}
+
+/** Google truncates search snippets around here. */
+const SNIPPET_LIMIT = 160
+
+/** Textarea with a live character count that warns past the snippet limit. */
+function CountedTextarea({
+  name, rows, defaultValue, placeholder, limit,
+}: {
+  name: string
+  rows: number
+  defaultValue: string
+  placeholder: string
+  limit: number
+}) {
+  const [value, setValue] = useState(defaultValue)
+  const over = value.length > limit
+
+  return (
+    <>
+      <textarea
+        name={name}
+        rows={rows}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        placeholder={placeholder}
+        className="field-area"
+      />
+      <p className={`text-xs mt-1.5 ${over ? 'text-red-600' : 'text-secondary'}`}>
+        {value.length} / {limit} characters{over ? ', search engines will cut this off' : ''}
+      </p>
+    </>
+  )
 }
 
 /**
@@ -80,13 +114,29 @@ export default function PostForm({
 
       <div>
         <label className="block text-sm font-medium mb-1.5">Excerpt</label>
-        <textarea
+        <CountedTextarea
           name="excerpt"
           rows={2}
           defaultValue={post.excerpt ?? ''}
-          placeholder="One or two sentences. Used on cards and as the search description."
-          className="field-area"
+          placeholder="One or two sentences. Shown on the cards, and used as the search description unless you set one below."
+          limit={SNIPPET_LIMIT}
         />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium mb-1.5">
+          Meta description <span className="text-secondary font-normal">(optional)</span>
+        </label>
+        <CountedTextarea
+          name="meta_description"
+          rows={2}
+          defaultValue={post.meta_description ?? ''}
+          placeholder="Only if the search snippet should differ from the excerpt. Leave empty to reuse it."
+          limit={SNIPPET_LIMIT}
+        />
+        <p className="text-xs text-secondary mt-1">
+          What Google shows under the title. Write it to earn the click, not to continue the headline.
+        </p>
       </div>
 
       <div>
